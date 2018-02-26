@@ -15,19 +15,14 @@ LD_SCRIPT := ldscript.ld
 SRCDIR := src
 OBJDIR := obj
 OUT_NAME := flapthemips
-MIPSimu := ../MIPSimu/build
+MIPSimu := ../../MIPSimu/build
 
 # Compile flags
 ASFLAGS = -G0 -mips32 -EB -mabi=32 -non_shared --warn -Isrc/
 LDFLAGS = -G0 -mips3 --static -T $(LD_SCRIPT)
 ODFLAGS = -d --section=.text -M no-aliases -M reg-names=numeric
 
-.PHONY: run dump clean
-
-# Maybe?
-#   --reduce-memory-overheads
-#   -O or -O0
-#   -mno-pdr
+.PHONY: run copy dump clean
 
 
 # Compile the whole program

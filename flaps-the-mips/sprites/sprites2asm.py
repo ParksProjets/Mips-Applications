@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 """
 
-TO DO.
+Convert all the sprites into an ASM file.
 
 Copyright (C) 2018, Guillaume Gonnet
 License MIT
@@ -49,7 +49,7 @@ def convert_sprite(name, config, out):
 
 
 def sprites2asm(config, outname):
-    "TODO."
+    "Convert all the sprites into an ASM file."
 
     out = open(outname, "w")
     out.write("# Convertd using sprites2asm.py\n\n")
@@ -67,7 +67,7 @@ def sprites2asm(config, outname):
 def main():
     "Entry point of the application."
 
-    parser = argparse.ArgumentParser(prog="img2asm",
+    parser = argparse.ArgumentParser(prog="sprites2asm",
         description="Convert an image into an ASM file.")
 
     parser.add_argument("config", default="sprites.ini", nargs="?",
@@ -75,10 +75,10 @@ def main():
 
     args = parser.parse_args()
 
-    parser = configparser.ConfigParser()
-    parser.read(args.config)
+    config = configparser.ConfigParser()
+    config.read(args.config)
 
-    sprites2asm(parser, "../src/sprites-data.s")
+    sprites2asm(config, "../src/sprites-data.s")
 
 
 if __name__ == "__main__":

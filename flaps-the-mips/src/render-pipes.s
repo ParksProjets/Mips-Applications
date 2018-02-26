@@ -7,7 +7,8 @@
 .file "render-pipes.s"
 
 
-render_pipe_i:  # Render the i-th pipe
+# Render the i-th pipe
+render_pipe_i:
 
     addi $tmp, $pipex, (-kSceneWith * 4)  # Don't render a pipe that is not on the screen
     bgez $tmp, render_pipe_i_end
@@ -26,7 +27,8 @@ render_pipe_i:  # Render the i-th pipe
 
 
 
-draw_pipe_i_top: # Draw the top part of the pipe
+# Draw the top part of the pipe
+draw_pipe_i_top:
 
     add $vgapos, $vga, $pipex
     addi $i, $pipey, -10*4
@@ -40,12 +42,12 @@ draw_pipe_i_top_loop: # Loop: repeat the sprite
     addi $i, -4
     bne $i, $zero, draw_pipe_i_top_loop
 
-    # TODO: save $vgapos
     move $savedvgapos, $vgapos
 
 
 
-draw_pipe_i_bottom: # Draw the bottom part of the pipe
+# Draw the bottom part of the pipe
+draw_pipe_i_bottom:
 
     li $tmp, (kSceneWith * 57 * 4)  # TODO: move before loop
     add $vgapos, $vgapos, $tmp
@@ -63,9 +65,8 @@ draw_pipe_i_bottom_loop: # Loop: repeat the sprite
 
 
 
-
-
-render_pipe_ends: # Render the end parts of the pipes
+# Render the end parts of the pipes
+render_pipe_ends:
 
     move $vgapos, $savedvgapos
 
@@ -80,8 +81,10 @@ render_pipe_ends: # Render the end parts of the pipes
 
 
 
-draw_pipe_i_topend: # Draw the end part of the top pipe
+# Draw the end part of the top pipe
+draw_pipe_i_topend:
 
+    move $spriteendcopy, $spriteend
     la $i, (sPipeEndData + (sPipeEndHeight * sPipeEndWidth * 2))  # TODO: rename $i
 
 draw_pipe_i_topend_loop: # Loop: TODO
@@ -99,11 +102,14 @@ draw_pipe_i_topend_loop: # Loop: TODO
 
 
 
-draw_pipe_i_bottomend: # Draw the end part of the top pipe
+# Draw the end part of the top pipe
+draw_pipe_i_bottomend:
 
+    move $spriteend, $spriteendcopy
+    la $spritestart, sPipeEndData  # Load the 'pipe-end' sprite
 
-
-    
+    li $tmp, (kSceneWith * 44 * 4)
+    add $vgapos, $vgapos, $tmp
 
 draw_pipe_i_bottomend_loop: # Loop: TODO
 
@@ -121,4 +127,3 @@ draw_pipe_i_bottomend_loop: # Loop: TODO
 
 
 render_pipe_i_end:
-

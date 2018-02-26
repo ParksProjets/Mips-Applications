@@ -1,6 +1,8 @@
 #
 #  Memory data
 #
+#  Copyright (C) 2018, Guillaume Gonnet
+#  License MIT
 
 .data
 
@@ -19,11 +21,20 @@
 .set kSwitchesAddress, 0x4004
 
 
+# Masks
+.set kButtonsMask, 0xF
+
 # Colors
 .set kBackgroundColor, 0x7E19
+
+
+
+# Bird information
+dBirdInputcounter: .word 0x0
+dBirdBtndown: .word 0x0
 
 
 # Pipes
 # A pipe is an array of (x, y) coordonates.
 .set kNumberOfPipes, 3
-pipes: .space kNumberOfPipes * 8
+dPipes: .space kNumberOfPipes * 8

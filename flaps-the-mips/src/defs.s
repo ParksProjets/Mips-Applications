@@ -38,6 +38,7 @@
 # Function: 'calculate_vgaendpos'
 .set $y, $4
 .set $spriteend, $5
+.set $spriteendcopy, $24
 
 
 # Other
