@@ -1,0 +1,5 @@
+# Ignore object directory
+obj/
+
+# Ignore Python cache
+__pycache__
