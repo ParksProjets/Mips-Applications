@@ -10,7 +10,8 @@ License MIT
 
 import argparse
 import configparser
-from math import ceil, log2
+import os.path as path
+from math import ceil, floor, log2
 from PIL import Image, ImageDraw, ImageFont
 
 
@@ -21,7 +22,7 @@ CHAR_SET = " ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
 def gray8to1(color):
     "Convert a 8 bits gray color to 1 bit."
 
-    return color > (255 / 2)
+    return int(color < 128)
 
 
 
@@ -36,7 +37,7 @@ def convert_char(image, draw, maxwidth, width, height, offset, char):
 
     for y in range(height):
         gsh = (8 * (y % 4))
-        pixels[y // 4] |= ((1 << maxwidth) << gsh)
+        pixels[y // 4] |= ((1 << width) << gsh)
 
         for x in range(width):
             px = gray8to1(image.getpixel((x, y)))
@@ -67,11 +68,12 @@ def save_asm(config, font, index, outname):
     words = []
 
     for char in CHAR_SET:
-        size = font.getsize(char)
-        words += convert_char(image, draw, maxwidth, size[0] - 1, height, offset, char)
+        size = font.getsize(char)[0] if char != " " else 5
+        words += convert_char(image, draw, maxwidth, size - 1, height, offset, char)
 
-    out.write(".data\n\n")
-    out.write(".set kFontIndexLength, %d\n\n" % index)
+    out.write(".section .zdata\n\n")
+    out.write(".set kFontIndexLength, %d\n" % index)
+    out.write(".set kNumberCharsPerWord, %d\n\n" % floor(32 / index))
     out.write("font: .word %s\n" % ", ".join(["0x%08X" % w for w in words]))
 
     out.close()
@@ -146,15 +148,20 @@ def main():
         help="number of bits for the index (default=min)")
 
     args = parser.parse_args()
+    here = path.dirname(__file__)
 
     config = configparser.ConfigParser()
-    with open(args.config) as file:
+    configf = path.abspath(path.join(here, args.config))
+
+    with open(configf) as file:
         config.read_string("[DEFAULT]\n%s" % file.read())
 
     if not args.i:
         args.i = ceil(log2(len(CHAR_SET)))
 
-    font2asm(config["DEFAULT"], args.d, args.i, "../../src/font.s", "../text/charset.py")
+    asmname = path.abspath(path.join(here, "../../src/text/font-data.s"))
+    pyname = path.abspath(path.join(here, "../text/charset.py"))
+    font2asm(config["DEFAULT"], args.d, args.i, asmname, pyname)
 
 
 if __name__ == "__main__":

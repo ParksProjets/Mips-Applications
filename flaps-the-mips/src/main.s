@@ -23,6 +23,11 @@
 
 .text
 
+
+# For exporting this game
+.global flaps_the_mips_main
+flaps_the_mips_main:
+
 # Entry point.
 main:
 

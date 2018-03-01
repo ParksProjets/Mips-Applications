@@ -4,6 +4,7 @@
 INDEX_LENGTH = 6
 
 CHAR_SET = [
+    (' ', 1),
     ('A', 5),
     ('B', 5),
     ('C', 5),

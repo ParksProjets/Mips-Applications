@@ -14,29 +14,48 @@ OD = $(GCC_PREFIX)objdump
 LD_SCRIPT := ldscript.ld
 SRCDIR := src
 OBJDIR := obj
+APPDIR := apps
+
+MAKEAPPS := ./scripts/makeapps
+STARTUP := $(SRCDIR)/startup/startup.s
+STARTUP_OBJ := startup.o
+
 OUT_NAME := home
 MIPSimu := ../../MIPSimu/build
 
 # Compile flags
 ASFLAGS = -G0 -mips32 -EB -mabi=32 -non_shared --warn -Isrc/
 LDFLAGS = -G0 -mips3 --static -T $(LD_SCRIPT)
-ODFLAGS = -d --section=.text -M no-aliases -M reg-names=numeric
+ODFLAGS = -D --section=.text --section=.data -M no-aliases -M reg-names=numeric
 
 .PHONY: run copy dump clean
 
 
-# Compile the whole program
-$(OBJDIR)/$(OUT_NAME).elf: $(OBJDIR)/main.o $(OBJDIR)
-	$(LD) $(LDFLAGS) -o $@ $<
+# Link all apps into a single ELF file.
+$(OBJDIR)/$(OUT_NAME).elf: $(OBJDIR)/home.o $(OBJDIR)/$(STARTUP_OBJ) $(LD_SCRIPT)
+	$(LD) $(LDFLAGS) -o $@  $(OBJDIR)/*.o
 
-# Assemble main file
-$(OBJDIR)/main.o: $(SRCDIR)/main.s $(OBJDIR)
+# Create the LD script
+$(LD_SCRIPT): $(OBJDIR)/$(STARTUP_OBJ) $(OBJDIR)/home.o $(APPDIR)/*.ini
+	$(MAKEAPPS)
+
+# Create the ASM data
+$(SRCDIR)/menu/apps-data.s: $(APPDIR)/*.ini
+	$(MAKEAPPS)
+
+
+# Assemble Home Menu
+$(OBJDIR)/home.o: $(SRCDIR)/main.s $(OBJDIR) $(SRCDIR)/menu/apps-data.s
+	$(AS) $(ASFLAGS) -o $@ $<
+
+# Assemble the startup
+$(OBJDIR)/$(STARTUP_OBJ): $(STARTUP)
 	$(AS) $(ASFLAGS) -o $@ $<
 
 
 # Run the program on MIPSimu
 run: copy
-	$(MIPSimu)/mipsimu $<
+	$(MIPSimu)/mipsimu --r2 $<
 
 # Create .bin file in MIPSimu build folder
 copy: $(MIPSimu)/$(OUT_NAME).bin
@@ -57,4 +76,4 @@ $(OBJDIR):
 
 # Clean all generated files
 clean:
-	rm -f $(OBJDIR)/*.o $(OUT_NAME).elf
+	rm -f $(OBJDIR)/*.o $(OUT_NAME).elf $(LD_SCRIPT)

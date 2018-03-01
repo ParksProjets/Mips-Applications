@@ -27,16 +27,18 @@ def convert_text(text):
     cpw = floor(32 / INDEX_LENGTH)
     num_words = ceil((len(text) + 1) / cpw)
 
-    offset = ceil(8 / INDEX_LENGTH)
+    # offset = ceil(8 / (32 % INDEX_LENGTH))
+    # TODO: FIX ME
     array = [0] * num_words
 
-    for i, char in enumerate(text, offset - 1):
+    for i, char in enumerate(text, 1):  # FIX ME: offset - 1):
         assert char in CHAR_DIR, "Character '%s' not in charset" % char
 
-        index = CHAR_INDEXES.index(char)
-        array[(i + 1) // cpw] |= index << (((i + 1) % cpw) * INDEX_LENGTH)
+        index = CHAR_INDEXES.index(char) + 1
+        array[i // cpw] |= index << ((i % cpw) * INDEX_LENGTH)
 
-    array[0] = (array[0] >> offset) | num_words
+    # array[0] = (array[0] >> offset) | num_words
+    array[0] = (array[0] << 2) | num_words
     return array
 
 

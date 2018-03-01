@@ -7,9 +7,17 @@
 .file "text.s"
 
 
+# Config
+.set kTextLengthBits, 8
+
+# Masks
+.set kTextLengthMask, ((1 << kTextLengthBits) - 1)
+.set kTextLetterMask, ((1 << kFontIndexLength) - 1)
+
+
 # Print a text on the screen.
-# Arguments: $text, $x, $y
-# Used: $vgapos, $tmp, $char, $charline, $pixel, $color
+# Arguments: $text, $x, $y, $color
+# Used: $vgapos, $tmp, $char, $charline, $index, $indexes, $pixel, $i2
 print_text:
 
     sll $vgapos, $y, 8  # Calculate vgapos = 320 * y + x
@@ -20,20 +28,35 @@ print_text:
 
     li $one, 1  # Register equal to 1 for loop condition
 
+    lw $indexes, ($text)  # Load first word
+    andi $textlength, $indexes, (kTextLengthMask)
+    srl $indexes, (kTextLengthBits)
+
+    j print_charindex_word
 
 
 print_char: # Loop: print all character of the text
 
-    nop
+    lw $indexes, ($text)
 
+print_charindex_word: # Loop: print all chars in the word
+
+    andi $index, $indexes, (kTextLetterMask)
+    sll $index, 3  # index *= 8
+    srl $indexes, (kFontIndexLength)
+
+    move $vgasaved, $vgapos
+    move $vgasaved2, $vgasaved
+    li $i2, 2
 
 
 print_char_loop: # Loop: draw the char word by word
 
-    lw $char, text($zero)
+    lw $char, (font - 8)($index)
 
 print_char_word: # Loop: draw the char line by line
 
+    move $vgapos, $vgasaved2
     andi $charline, $char, 0xFF
 
 print_char_line: # Loop: draw the char pixel by pixel
@@ -45,15 +68,24 @@ print_char_line: # Loop: draw the char pixel by pixel
 
 after_print_char_pixel:
 
+    addi $vgapos, 4
     srl $charline, 1
     bne $charline, $one, print_char_line  # Print the next pixel
 
     srl $char, 8
+    addi $vgasaved2, $vgasaved2, (kScreenWidth * 4)
     bne $char, $zero, print_char_word  # Print the next line
 
-    bne $TODO, $zero, print_char_loop  # Print the word
+    addi $i2, -1
+    addi $index, 4
+    bne $i2, $zero, print_char_loop  # Print the next word
 
 
-    bne $TODO, $zero, print_char  # Print the next character
+    addi $vgapos, $vgapos, (-kScreenWidth * 4 * 7 + 4)
+    bne $indexes, $zero, print_charindex_word  # Print the next character in the word
+
+    addi $text, 4
+    addi $textlength, -1
+    bgtz $textlength, print_char  # Print the next character
 
     jr $ra  # Function return

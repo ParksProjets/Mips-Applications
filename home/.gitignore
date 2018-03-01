@@ -1,4 +1,5 @@
-# Ignore object directory
+# Ignore object directories
+compiled/
 obj/
 
 # Ignore Python cache

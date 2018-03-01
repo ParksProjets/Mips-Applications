@@ -28,30 +28,39 @@
 
 # Register aliases
 .set $vga, $16
-.set $savedra, $30
-
-.set $paddley, $13
+.set $one, $20
 
 
-# Update specific aliases
-.set $btns, $11
-
-.set $ballx, $4
-.set $bally, $5
-.set $ballvelx, $6
-.set $ballvely, $7
-
-
-# Render specific aliases
-.set $x, $4
-.set $y, $5
-.set $width, $6
-.set $height, $7
-.set $color, $8
-
-.set $vgapos, $11
-.set $vgaend, $12
+.set $pixel, $8
+.set $vgapos, $9
+.set $vgasaved, $10
+.set $i, $11
+.set $i2, $19
 
 
 .set $tmp, $24
 .set $tmp2, $25
+
+
+# Text module aliases
+.set $text, $2
+.set $color, $3
+.set $x, $4
+.set $y, $5
+
+.set $char, $12
+.set $charline, $13
+.set $textlength, $14
+.set $index, $15
+.set $indexes, $24
+.set $vgasaved2, $25
+
+
+# Menu module aliases
+.set $width, $12
+.set $height, $13
+.set $vgaend, $15
+
+.set $btns, $2
+.set $cursorpos, $14
+

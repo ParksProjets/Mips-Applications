@@ -1,0 +1,21 @@
+[{
+    "name": "RAM0",
+    "sections": ".text",
+    "origin": 0,
+    "length": 8192,
+    "begin": [
+        "section:obj/startup.o (.text)",
+        "section:*.zdata"
+    ]
+},
+{
+    "name": "RAM1",
+    "sections": ".data",
+    "origin": 131072,
+    "length": 32768,
+    "end": [
+        "section:*.sdata",
+        "__gp = .;",
+        "section:*.sbss"
+    ]
+}]
