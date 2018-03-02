@@ -16,19 +16,19 @@ SECTIONS
     .text : {
         obj/startup.o (.text)
         obj/home.o (.zdata)
-        obj/pong.o (.data)
-        obj/squares.o (.rodata)
-        obj/mips-invader.o (.text)
-        obj/squares.o (.data)
         obj/mips-invader.o (.data)
+        obj/screen-saver.o (.text)
+        obj/home.o (.text)
     } > RAM0
 
     /* RAM1 memory data */
     . = 0x20000;
     .data : {
         obj/pong.o (.text)
-        obj/squares.o (.text)
-        obj/home.o (.text)
+        obj/pong.o (.data)
+        obj/screen-saver.o (.data)
+        obj/mips-invader.o (.text)
+        *(.rodata)
         __gp = .;
     } > RAM1
 }

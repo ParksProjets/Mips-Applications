@@ -37,11 +37,11 @@ $(OBJDIR)/$(OUT_NAME).elf: $(OBJDIR)/home.o $(OBJDIR)/$(STARTUP_OBJ) $(LD_SCRIPT
 
 # Create the LD script
 $(LD_SCRIPT): $(OBJDIR)/$(STARTUP_OBJ) $(OBJDIR)/home.o $(APPDIR)/*.ini
-	$(MAKEAPPS)
+	# $(MAKEAPPS)
 
 # Create the ASM data
 $(SRCDIR)/menu/apps-data.s: $(APPDIR)/*.ini
-	$(MAKEAPPS)
+	# $(MAKEAPPS)
 
 
 # Assemble Home Menu
@@ -55,7 +55,7 @@ $(OBJDIR)/$(STARTUP_OBJ): $(STARTUP)
 
 # Run the program on MIPSimu
 run: copy
-	$(MIPSimu)/mipsimu --r2 $<
+	$(MIPSimu)/mipsimu --r2 $(MIPSimu)/$(OUT_NAME).bin
 
 # Create .bin file in MIPSimu build folder
 copy: $(MIPSimu)/$(OUT_NAME).bin
