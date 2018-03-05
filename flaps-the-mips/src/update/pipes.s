@@ -4,14 +4,14 @@
 #  Copyright (C) 2018, Guillaume Gonnet
 #  License MIT
 
-.file "update-pipes.s"
+.file "update/pipes.s"
 
 
 # Update the pipes.
 update_pipes:
 
-    la $addr, pipes
-    la $endaddr, (pipes + 8 * kNumberOfPipes)
+    la $addr, (dPipes)
+    la $endaddr, (dPipes + 8 * kNumberOfPipes)
 
 
 update_pipe_i: # Loop: update the i-th pipe
@@ -75,7 +75,7 @@ after_rand_pipe:
 
 
     # Render the current pipe
-    .include "render-pipes.s"
+    .include "render/pipes.s"
     .file "update-pipes.s"
 
 
@@ -84,6 +84,4 @@ after_rand_pipe:
     addi $addr, $addr, 8  # $addr += 8
     bne $addr, $endaddr, update_pipe_i
 
-
     # TODO
-    j main_loop

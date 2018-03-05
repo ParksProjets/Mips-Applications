@@ -34,13 +34,13 @@ blue_screen_clear_loop:  # Loop: clean the screen pixel by pixel
     bne $tmp, $tmp2, blue_screen_clear_loop
 
 
-    li $y, (50 * 4)
-    li $x, (20 * 4)
-    li $color, (kGrayBackgroundColor)
+    # li $y, (50 * 4)
+    # li $x, (20 * 4)
+    # li $color, (kGrayBackgroundColor)
 
-    li $width, (50 * 4)
-    li $width, 12
-    jal draw_rectangle  # Draw 'Windows' rectangle
+    # li $width, (50 * 4)
+    # li $width, 12
+    # jal draw_rectangle  # Draw 'Windows' rectangle
 
 
     li $y, (50 * 4)
@@ -50,11 +50,11 @@ blue_screen_clear_loop:  # Loop: clean the screen pixel by pixel
     jal print_multiline_text  # Print error message
 
 
-    li $y, (50 * 4)
-    li $x, (20 * 4)
+    # li $y, (50 * 4)
+    # li $x, (20 * 4)
 
-    la $text, (tWindowData)
-    jal print_multiline_text  # Print error message
+    # la $text, (tWindowData)
+    # jal print_multiline_text  # Print error message
 
 
     j .  # Now halt

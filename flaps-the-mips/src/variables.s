@@ -21,8 +21,6 @@
 .set kSwitchesAddress, 0x4004
 
 
-# Masks
-.set kButtonsMask, 0xF
 
 # Colors
 .set kBackgroundColor, 0x7E19

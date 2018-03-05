@@ -4,7 +4,7 @@
 #  Copyright (C) 2018, Guillaume Gonnet
 #  License MIT
 
-.file "render-pipes.s"
+.file "render/pipes.s"
 
 
 # Render the i-th pipe

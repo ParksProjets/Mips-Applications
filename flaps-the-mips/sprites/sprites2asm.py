@@ -78,7 +78,7 @@ def main():
     config = configparser.ConfigParser()
     config.read(args.config)
 
-    sprites2asm(config, "../src/sprites-data.s")
+    sprites2asm(config, "../src/render/sprites-data.s")
 
 
 if __name__ == "__main__":

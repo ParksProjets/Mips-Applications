@@ -36,7 +36,7 @@ $(OBJDIR)/main.o: $(SRCDIR)/main.s $(OBJDIR)
 
 # Run FlapTheMips on MIPSimu
 run: copy
-	$(MIPSimu)/mipsimu $<
+	$(MIPSimu)/mipsimu -d -o 500000 $(MIPSimu)/$(OUT_NAME).bin
 
 # Create .bin file in MIPSimu build folder
 copy: $(MIPSimu)/$(OUT_NAME).bin

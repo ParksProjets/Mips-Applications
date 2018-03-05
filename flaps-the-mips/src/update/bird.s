@@ -4,7 +4,7 @@
 #  Copyright (C) 2018, Guillaume Gonnet
 #  License MIT
 
-.file "bird.s"
+.file "update/bird.s"
 
 
 # Update the bird.
@@ -13,7 +13,7 @@ update_bird:
 user_input: # Manage the user input
 
     lw $btns, kSwitchesAddress($zero)
-    andi $btns, $btns, kButtonsMask
+    srl $btns, 16  # Get buttons value
 
     lw $inputcounter, dBirdInputcounter($zero)
 
@@ -43,20 +43,3 @@ update_bird_position: # Update the bird position
 
     addi $birdvel, 2
     add $birdy, $birdvel
-
-
-
-
-# Render the bird.
-render_bird:
-
-    sll $vgapos, $y, 8     # Calculate vgapos = 320 * y + x
-    sll $tmp, $y, 6        #   320 = 2^8 + 2^6
-    addu $tmp, $tmp, $x
-    addu $tmp, $tmp, $vga
-    addu $vgapos, $vgapos, $tmp
-
-
-    la $spritestart, sBirdData  # Load the 'bird' sprite
-
-    jal draw_sprite_fixed

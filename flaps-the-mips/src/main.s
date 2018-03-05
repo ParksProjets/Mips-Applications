@@ -5,17 +5,18 @@
 #  License MIT
 
 .file "main.s"
-
 .set noreorder
 
+
+# Memory and definitions.
 .include "variables.s"
 .include "defs.s"
 
-# Include sprite data
-.include "sprites-data.s"
+# Generated data
+.include "render/sprites-data.s"
 
 
-# Application options
+# Application config
 .set kFramePerSecond, 30
 
 
@@ -39,34 +40,11 @@ main:
     li $tmp, 200
     sw $tmp, kTimerThresoldAddress($zero)  # Set timer thresold
 
-    # Fall through 'init'
 
+    .include "game/init.s"
+    .file "main.s"
 
-
-# Init the game
-init:
-
-    li $tmp, 50
-    sw $tmp, pipes($zero)
-
-init_pipes: # The first 3 pipes are not random.
-
-    li $tmp, (320 + 114)*4
-    sw $tmp, (pipes + 0)($zero)  # First pipe x
-    li $tmp, 60*4
-    sw $tmp, (pipes + 4)($zero)  # First pipe y
-
-    li $tmp, (320 + 230)*4
-    sw $tmp, (pipes + 8)($zero)  # First pipe x
-    li $tmp, 105*4
-    sw $tmp, (pipes + 12)($zero)  # First pipe y
-
-    li $tmp, (320 + 344)*4
-    sw $tmp, (pipes + 16)($zero)  # First pipe x
-    li $tmp, 35*4
-    sw $tmp, (pipes + 20)($zero)  # First pipe y
-
-    # Fall through 'main_loop'
+    # Fall through 'cleanup'
 
 
 
@@ -74,7 +52,7 @@ init_pipes: # The first 3 pipes are not random.
 cleanup:
 
     move $tmp, $vga
-    li $pixel, kBackgroundColor
+    li $pixel, (kBackgroundColor)
 
     li $tmp2, (4 * 320 * 240)  # TODO: constants
     add $tmp2, $tmp2, $vga
@@ -102,10 +80,14 @@ wait_for_timer:  # Loop: wait for the next frame
 
 end_wait_for_timer:
 
-    .include "update-pipes.s"
-    .file "main.s"
+    .include "update/pipes.s"
+
+    .include "update/bird.s"
+    .include "render/bird.s"
+
+    j main_loop
 
 
 
 # Libraries
-.include "render-funcs.s"
+.include "render/gfx-module.s"

@@ -8,19 +8,26 @@
 # Non-local registers
 .set $birdx, $16
 .set $birdy, $17
-.set $vga, $18
+.set $birdvel, $18
+.set $vga, $19
 
 
 # General local registers
 .set $addr, $8
 .set $endaddr, $9
 .set $i, $21
+.set $savedvgapos, $30
+.set $savedra, $30
 
 
 # Update special aliases
 .set $pipex, $12
 .set $pipey, $13
 .set $pipeendy, $6
+
+.set $btns, $6
+.set $btndown, $12
+.set $inputcounter, $13
 
 
 # Render special aliases
@@ -32,7 +39,8 @@
 .set $width, $20
 
 .set $spriteaddr, $25
-.set $savedvgapos, $19
+.set $savedvgapos, $30
+.set $spritetail, $4
 
 
 # Function: 'calculate_vgaendpos'

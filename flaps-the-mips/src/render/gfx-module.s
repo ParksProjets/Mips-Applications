@@ -4,25 +4,26 @@
 #  Copyright (C) 2018, Guillaume Gonnet
 #  License MIT
 
-.file "render-funcs.s"
+.file "render/gfx-module.s"
 
 
 # Draw a sprite on the screen.
-# Arguments: *$spritestart, *$vgapos, $width, *$height
-# Used: $j
+# Arguments: *$spriteaddr, $spritetail, $vgapos, $width
+# Used: $tmp
 draw_sprite_fixed:
 
-    mv $savedra, $ra
-
-    li $j, 0
-    add $width, $width, $x
+    move $savedra, $ra
+    srl $tmp, $width, 1
 
 draw_sprite_fixed_loop:
 
+    add $spriteend, $spriteaddr, $tmp
     jal draw_sprite_line
-    addi $vgapos, $vgapos, (kSceneWith * 4)
 
-    bne $TODO, $TODO, draw_sprite_fixed_loop
+    addi $vgapos, $vgapos, (kSceneWith * 4)
+    sub $vgapos, $width
+
+    bne $spriteaddr, $spritetail, draw_sprite_fixed_loop
     j $savedra  # Function return
 
 
@@ -40,11 +41,19 @@ draw_sprite_line:
 
 draw_sprite_line_loop: # Loop: TODO
 
-    lw $pixel, 0($spriteaddr)  # Load two pixels
-    sw $pixel, 0($vgapos)  # Draw p+0 (on LSB)
+    lw $pixel, ($spriteaddr)  # Load two pixels
+
+    beq $pixel, $zero, draw_sl_transparent1
+    sw $pixel, ($vgapos)  # Draw p+0 (on LSB)
+
+draw_sl_transparent1:
 
     srl $pixel, $pixel, 16  # Get second color in MSB
+
+    beq $pixel, $zero, draw_sl_transparent2
     sw $pixel, 4($vgapos)  # Draw p+1
+
+draw_sl_transparent2:
 
     addi $vgapos, $vgapos, 8
     addi $spriteaddr, $spriteaddr, 4
