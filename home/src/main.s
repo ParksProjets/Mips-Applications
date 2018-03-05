@@ -13,7 +13,9 @@
 .include "variables.s"
 
 # Data
+.include "gfx/images-data.s"
 .include "text/font-data.s"
+.include "text/text-data.s"
 .include "menu/apps-data.s"
 
 .include "debug.s"
@@ -46,7 +48,7 @@ main:
 # First, cleaan the whole screen
 cleanup:
 
-    li $pixel, kBackgroundColor
+    li $pixel, (kBackgroundColor)
 
     move $tmp, $vga
     li $tmp2, (4 * kScreenWidth * kScreenHeight)
@@ -54,7 +56,7 @@ cleanup:
 
 cleanup_loop:  # Loop: clean the screen pixel by pixel
 
-    sw $pixel, 0($tmp)
+    sw $pixel, ($tmp)
 
     addi $tmp, $tmp, 4
     bne $tmp, $tmp2, cleanup_loop
@@ -64,7 +66,8 @@ end_cleanup_loop:
     .include "menu/draw.s"
 
     li $cursorpos, 0
-    jal render_cursor
+    li $prevcurpos, 1
+    jal render_cursor_menu
 
     # Fall through 'main_loop'
 
@@ -82,10 +85,10 @@ end_wait_for_timer:
 
     .include "menu/menu.s"
 
-    j main_loop
-
 
 
 # Libraries
 .include "gfx/gfx.s"
+.include "gfx/image.s"
+.include "gfx/blue-screen.s"
 .include "text/text.s"

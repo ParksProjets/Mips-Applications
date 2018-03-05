@@ -4,10 +4,11 @@
 #  Copyright (C) 2018, Guillaume Gonnet
 #  License MIT
 
-.data
+.section .zdata
 
 
-# Height of the game area
+# Size of the game area
+.set kGameAreaWidth, 320
 .set kGameAreaHeight, 200
 
 
@@ -25,7 +26,14 @@
 .set kBallWidth, 6
 .set kBallHeight, 6
 
+.set kBallVelX, 28
 .set kBallColor, 0xADB5
+
+
+# Position helpers
+.set kPaddleMaxY, (kGameAreaHeight - kPaddleHeight)
+.set kNumberStepsX, ((kGameAreaWidth - 2*kPaddleWidth) / kBallVelX)
+.set kFixedMiddle, ((kNumberStepsX / 2) * kBallVelX)
 
 
 # Player control

@@ -15,7 +15,7 @@
     "length": 32768,
     "end": [
         "section:*.sdata",
-        "__gp = .;",
+        "_gp = .;",
         "section:*.sbss"
     ]
 }]

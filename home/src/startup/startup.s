@@ -13,7 +13,7 @@
 .global startup
 startup:
 
-    la $gp, 0x027FF0
-    la $sp, __gp
+    la $sp, 0x027FF0
+    la $gp, _gp
 
     j home_menu

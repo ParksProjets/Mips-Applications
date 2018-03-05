@@ -13,16 +13,16 @@ init_game:
 
 init_ball: # Initalize the ball
 
-    li $ballx, (2 * kScreenWidth)
+    li $ballx, 4 * (kPaddleWidth + kFixedMiddle)
     sw $ballx, dBallX($zero)
 
-    li $bally, (2 * kGameAreaHeight)
+    li $bally, (2 * (kGameAreaHeight - kBallHeight))
     sw $ballx, dBallY($zero)
 
-    li $ballvelx, 24
+    li $ballvelx, (-kBallVelX)
     sw $ballvelx, dBallVelocityX($zero)
 
-    li $ballvely, 0
+    li $ballvely, 8
     sw $ballvely, dBallVelocityY($zero)
 
 

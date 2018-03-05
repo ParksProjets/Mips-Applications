@@ -21,21 +21,20 @@ update_ball:
 
 
 
-
 # Test if the ball hits the floor or the celling.
 hittest_vertical_borders:
 
-    li $tmp, kGameAreaHeight
-    beq $ballx, $tmp, limit_ball_vertical  # Limit: floor
+    addi $tmp, $bally, (-kGameAreaHeight * 4)
+    bgez $tmp, limit_ball_vertical  # Limit: floor
 
-    bne $ballx, $zero, end_hittest_vertical_borders  # Limit: celling
+    bgtz $bally, end_hittest_vertical_borders  # Limit: celling
 
 limit_ball_vertical:
 
-    sub $bally, $zero, $bally  # bally = -bally
+    sub $ballvely, $zero, $ballvely  # ballvely = -ballvely
+    add $bally, $ballvely
 
 end_hittest_vertical_borders:
-
 
 
 
@@ -44,28 +43,10 @@ hittest_left_paddle:
 
     lw $paddley, dPaddleLY($zero)
 
-    bgtz $ballx, end_hittest_left_paddle  # The ball doesn't hit the left paddle
-
-    sub $tmp, $paddley, $bally
-    bgtz $tmp, ball_scored_left  # not(paddley <= bally) -> player scored
-
-    addi $tmp, 5 # TODO: use constant height
-    bgez $tmp, hit_left_paddle  # paddley <= bally -> ball hits paddle
-
-
-ball_scored_left: # The ball hits the left wall: the right player score!
-
-    # TODO: add point
-    j main
-
-
-hit_left_paddle: # The ball hist the paddle
-
-    sub $ballvelx, $zero, $ballvelx  # ballvelx = -ballvelx
-
+    bgtz $ballx, end_hittest_left_paddle  # The ball isn't on the left
+    jal hittest_paddle
 
 end_hittest_left_paddle:
-
 
 
 
@@ -74,28 +55,17 @@ hittest_right_paddle:
 
     lw $paddley, dPaddleRY($zero)
 
-    bgtz $ballx, end_hittest_right_paddle  # The ball doesn't hit the left paddle
+    addi $tmp, $ballx, (-(kGameAreaWidth - kBallWidth) * 4)
+    bltz $tmp, end_hittest_right_paddle  # The ball isn't on the right
 
-    sub $tmp, $paddley, $bally
-    bgtz $tmp, ball_scored_right  # not(paddley <= bally) -> player scored
-
-    addi $tmp, 5 # TODO: use constant height
-    bgez $tmp, hit_right_paddle  # paddley <= bally -> ball hits paddle
-
-
-ball_scored_right: # The ball hits the right wall: the left player score!
-
-    # TODO: add point
-    j main
-
-
-hit_right_paddle: # The ball hist the paddle
-
-    sub $ballvelx, $zero, $ballvelx  # ballvelx = -ballvelx
-
+    jal hittest_paddle
 
 end_hittest_right_paddle:
 
+
+
+# Save the ball state for the next frame
+save_ball_state:
 
     sw $ballx, dBallX($zero)
     sw $bally, dBallY($zero)

@@ -4,9 +4,9 @@
 
 .set kNumberOfApps, 3
 
-kPongTitle: .word 0xAA7A8403, 0x1105F82D, 0x00022A6A
-kMipsInvaderTitle: .word 0xBAB90E03, 0x1CC69281, 0x0002D81F
-kScreenSaverTitle: .word 0xBEF80E04, 0x2980182D, 0x2EC1CAC1, 0x00000020
+kPongTitle: .word 0x31340E04, 0x292A3734, 0x33341B01, 0x0000002C
+kMipsInvaderTitle: .word 0x352E1804, 0x33140138, 0x2A29263B, 0x00000037
+kScreenSaverTitle: .word 0x392A1804, 0x012A3739, 0x3501332A, 0x2A383A26
 
 kAppTexts: .word kScreenSaverTitle, kMipsInvaderTitle, kPongTitle
-kAppEntries: .word __pong_main, __mips_invader_main, __screen_saver_main
+kAppEntries: .word __pong_main, __mips_invader_main, __screen_saver_main, lock_system, blue_screen

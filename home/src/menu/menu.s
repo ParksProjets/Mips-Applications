@@ -25,7 +25,7 @@ update_menu:
     beq $tmp, $btns, main_loop  # No changes on btns state
 
 
-    lw $cursorpos, cursorpos($zero)
+    lw $prevcurpos, cursorpos($zero)  # Load last cursor pos
 
     li $tmp, kMoveCursorUp
     beq $btns, $tmp, move_cursor_up  # Move the cursor up
@@ -43,56 +43,77 @@ update_menu:
 # Move the cursor up
 move_cursor_up:
 
-    beq $cursorpos, $zero, main_loop
+    beq $prevcurpos, $zero, main_loop
 
-    addi $cursorpos, -1
-    j render_cursor
+    addi $cursorpos, $prevcurpos, -1
+    j render_cursor_menu
 
 
 
 # Move the cursor down
 move_cursor_down:
 
-    li $tmp, (kNumberOfApps - 1)
-    beq $cursorpos, $tmp, main_loop
+    li $tmp, (kNumberOfApps + 1)
+    beq $prevcurpos, $tmp, main_loop
 
-    addi $cursorpos, 1
-    j render_cursor
+    addi $cursorpos, $prevcurpos, 1
+    j render_cursor_menu
 
 
 
 # Run an application
 run_app:
 
-    sll $cursorpos, 2  # cursorpos *= 2
-    lw $tmp, kAppEntries($cursorpos)
+    sll $prevcurpos, 2  # prevcurpos *= 2
+    lw $tmp, kAppEntries($prevcurpos)
 
     jalr $tmp
-    j .  # Pause the program
+    j home_menu  # Restart the home menu
 
 
 
-# Render the xursor
-render_cursor:
 
-    lw $tmp, cursorpos($zero)
 
-    li $color, 0xFFFF
-    li $width, (4 * 4)
-    li $x, (22 * 4)
-
-    sll $y, $tmp, 7  # y = cursorpos * 32 * 4
-    addi $y, ((20 + 2) * 4)
-
-    li $height, 4
-    jal draw_rectangle
+# Render the cursor in the menu
+render_cursor_menu:
 
     li $color, 0xF800
+    jal draw_cursor
+
+    sw $cursorpos, cursorpos($zero)
+    move $cursorpos, $prevcurpos
+
+    li $color, 0xFFFF
+    jal draw_cursor
+
+    j main_loop
+
+
+
+# Draw the cursor
+draw_cursor:
+
+    addi $botcurpos, $cursorpos, (-kNumberOfApps)    
+
+calculate_cursor_pos:
+
+    bgez $botcurpos, calculate_cursor_pos_bottom
+
+    li $x, (22 * 4)
     sll $y, $cursorpos, 7  # y = cursorpos * 32 * 4
     addi $y, ((20 + 2) * 4)
 
-    li $height, 4
-    jal draw_rectangle
+    j render_cursor_fixed
 
-    sw $cursorpos, cursorpos($zero)
-    j main_loop
+calculate_cursor_pos_bottom:
+
+    li $y, (224 * 4)
+    sll $x, $botcurpos, 9  # x = cursorpos * 128 * 4
+    addi $x, ((20 - 8) * 4)
+
+render_cursor_fixed:
+
+    li $width, (4 * 4)
+    li $height, 4
+
+    j draw_rectangle

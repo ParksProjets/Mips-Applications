@@ -55,7 +55,7 @@ $(OBJDIR)/$(STARTUP_OBJ): $(STARTUP)
 
 # Run the program on MIPSimu
 run: copy
-	$(MIPSimu)/mipsimu --r2 $(MIPSimu)/$(OUT_NAME).bin
+	$(MIPSimu)/mipsimu --r2 -d $(MIPSimu)/$(OUT_NAME).bin
 
 # Create .bin file in MIPSimu build folder
 copy: $(MIPSimu)/$(OUT_NAME).bin

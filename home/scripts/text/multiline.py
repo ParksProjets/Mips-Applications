@@ -8,6 +8,8 @@ License MIT
 
 """
 
+from collections import OrderedDict
+
 from charset import CHAR_SET
 
 
@@ -33,41 +35,21 @@ def cut_text_lines(text, maxwidth):
     "Cut a text in several lines."
 
     lines = []
-    width, current = (0, [])
+    textlines = text.split("\n")
+    space = (CHAR_DIR[" "] + 1)
 
-    for word in text.split():
-        width += word_width(word, maxwidth)
-        if width > maxwidth:
-            lines.append(" ".join(current))
-            width, current = (0, [])
-        current.append(word)
+    for textline in textlines:
+        width, current = (0, [])
 
-    lines.append(" ".join(current))
+        for word in textline.split():
+            width += word_width(word, maxwidth)
+            if width > maxwidth:
+                lines.append(" ".join(current))
+                width, current = (0, [])
+
+            width += space
+            current.append(word)
+
+        lines.append(" ".join(current))
+
     return lines
-
-
-
-def left_align_text(text, maxwidth):
-    "Left align a text."
-
-    lines = cut_text_lines(text)
-    return (lines, [0] * len(lines))
-
-
-
-def center_align_text(text, maxwidth):
-    "Center align a text."
-
-    # TODO
-    lines = cut_text_lines(text)
-    return (lines, [0] * len(lines))
-
-
-
-def right_align_text(text, maxwidth):
-    "Right align a text."
-
-    # TODO
-    lines = cut_text_lines(text)
-    return (lines, [0] * len(lines))
-

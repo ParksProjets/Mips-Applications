@@ -13,11 +13,35 @@
 # Masks
 .set kTextLengthMask, ((1 << kTextLengthBits) - 1)
 .set kTextLetterMask, ((1 << kFontIndexLength) - 1)
+.set kMultilineContinuation, (1 << 7)
+
+
+# Print a multiline text on the screen.
+# Arguments: $text, $x, $y, $color
+# Used: same as 'print_text', $i
+print_multiline_text:
+
+    move $savedra, $ra
+
+print_multiline_text_line: # Loop: print the text line by line
+
+    lw $i, ($text)
+    andi $i, (kMultilineContinuation)
+
+    jal print_text
+
+    addi $y, (10 * 4)
+    bne $i, $zero, print_multiline_text_line
+
+    jr $savedra
+
+
 
 
 # Print a text on the screen.
 # Arguments: $text, $x, $y, $color
-# Used: $vgapos, $tmp, $char, $charline, $index, $indexes, $pixel, $i2
+# Used: $vgapos, $tmp, $char, $charline, $index, $indexes, $pixel, $i2,
+#       $vgasaved2, $one, $textlength
 print_text:
 
     sll $vgapos, $y, 8  # Calculate vgapos = 320 * y + x
@@ -29,7 +53,7 @@ print_text:
     li $one, 1  # Register equal to 1 for loop condition
 
     lw $indexes, ($text)  # Load first word
-    andi $textlength, $indexes, (kTextLengthMask)
+    andi $textlength, $indexes, (kTextLengthMask & ~kMultilineContinuation)
     srl $indexes, (kTextLengthBits)
 
     j print_charindex_word

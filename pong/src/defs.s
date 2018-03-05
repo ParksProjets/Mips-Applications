@@ -30,6 +30,7 @@
 .set $vga, $16
 .set $savedra, $30
 
+.set $cpuskip, $17
 .set $paddley, $13
 
 

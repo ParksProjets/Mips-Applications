@@ -1,6 +1,5 @@
 #
 #  Pong.
-#    https://github.com/dbader/potatoes/blob/master/src/apps/pong.c
 #
 #  Copyright (C) 2018, Guillaume Gonnet
 #  License MIT
@@ -18,6 +17,7 @@
 .set kFramePerSecond, 30
 
 .include "debug.s"
+
 
 .text
 
@@ -85,3 +85,4 @@ end_wait_for_timer:
 
 # Libraries
 .include "render/gfx.s"
+.include "update/hit-paddle.s"

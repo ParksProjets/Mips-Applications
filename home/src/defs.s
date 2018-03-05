@@ -20,23 +20,17 @@
 .set kSwitchesAddress, 0x4004
 
 
-# Color set
-.set kBackgroundColor, 0x02E0
-.set kTextColor, 0xADB5
 
-
-
-# Register aliases
+# Common register aliases
 .set $vga, $16
 .set $one, $20
-
+.set $savedra, $17
 
 .set $pixel, $8
 .set $vgapos, $9
 .set $vgasaved, $10
 .set $i, $11
 .set $i2, $19
-
 
 .set $tmp, $24
 .set $tmp2, $25
@@ -56,11 +50,17 @@
 .set $vgasaved2, $25
 
 
-# Menu module aliases
+# Graphics module aliases
 .set $width, $12
 .set $height, $13
 .set $vgaend, $15
+.set $imgstart, $19
+.set $imgend, $10
 
+
+# Menu module aliases
 .set $btns, $2
-.set $cursorpos, $14
 
+.set $cursorpos, $14
+.set $prevcurpos, $19
+.set $botcurpos, $15

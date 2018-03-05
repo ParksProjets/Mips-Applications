@@ -16,7 +16,12 @@ from PIL import Image, ImageDraw, ImageFont
 
 
 # Character set
-CHAR_SET = " ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
+CHAR_SET = (
+    " \"'-_+*/()."
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+    "abcdefghijklmnopqrstuvwxyz"
+    "0123456789"
+)
 
 
 def gray8to1(color):
@@ -59,8 +64,8 @@ def save_asm(config, font, index, outname):
     assert "maxwidth" in config, "Please provide 'maxwidth' in config file"
 
     maxwidth = config.getint("maxwidth")
-    height = config.getint("height", fallback=font.getmetrics()[0])
-    offset = config.getint("offset", fallback=0)
+    height = config.getint("height", font.getmetrics()[0])
+    offset = config.getint("offset", 0)
 
     draw = ImageDraw.Draw(image)
     draw.font = font
@@ -91,8 +96,8 @@ def save_charset(font, index, outname):
     array = []
 
     for char in CHAR_SET:
-        size = font.getsize(char)
-        array.append("    ('%s', %d)" % (char, size[0] - 1))
+        size = (font.getsize(char)[0] - 1)
+        array.append("    ('%s', %d)" % (char.replace("'", "\\'"), size))
 
     out.write("CHAR_SET = [\n%s\n]\n" % ",\n".join(array))
     out.close()
@@ -103,8 +108,8 @@ def save_debug_img(config, font):
     "Save the charset as a PNG image."
 
     width = 1 + config.getint("maxwidth")
-    height = 2 + config.getint("height", fallback=font.getmetrics()[0])
-    offset = config.getint("offset", fallback=0)
+    height = 2 + config.getint("height", font.getmetrics()[0])
+    offset = config.getint("offset", 0)
 
     image = Image.new("L", (1 + width * len(CHAR_SET), height), 0xFF)
     draw = ImageDraw.Draw(image)
@@ -116,13 +121,17 @@ def save_debug_img(config, font):
 
 
 
-def font2asm(config, debug, index, asmname, pyname):
+def font2asm(config, debug, asmname, pyname):
     "Convert a font file (TTF) into an ASM file."
 
     assert "file" in config, "Please provide 'file' in config file"
     assert "size" in config, "Please provide 'size' in config file"
 
-    font = ImageFont.truetype(config.get("file"), config.getint("size"))
+    here = path.dirname(__file__)
+    fontname = path.abspath(path.join(here, config.get("file")))
+
+    index = config.getint("index-length", ceil(log2(len(CHAR_SET))))
+    font = ImageFont.truetype(fontname, config.getint("size"))
 
     save_charset(font, index, pyname)
     save_asm(config, font, index, asmname)
@@ -144,9 +153,6 @@ def main():
     parser.add_argument("-d", action="store_true",
         help="debug: save charset in a PNG")
 
-    parser.add_argument("-i", type=int, metavar="bits", default=0,
-        help="number of bits for the index (default=min)")
-
     args = parser.parse_args()
     here = path.dirname(__file__)
 
@@ -156,12 +162,9 @@ def main():
     with open(configf) as file:
         config.read_string("[DEFAULT]\n%s" % file.read())
 
-    if not args.i:
-        args.i = ceil(log2(len(CHAR_SET)))
-
     asmname = path.abspath(path.join(here, "../../src/text/font-data.s"))
     pyname = path.abspath(path.join(here, "../text/charset.py"))
-    font2asm(config["DEFAULT"], args.d, args.i, asmname, pyname)
+    font2asm(config["DEFAULT"], args.d, asmname, pyname)
 
 
 if __name__ == "__main__":

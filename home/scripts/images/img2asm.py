@@ -12,16 +12,7 @@ import argparse
 import configparser
 from PIL import Image
 
-
-def rgb24to16(r, g, b):
-    "Convert a 24 bits RGB color to 16 bits."
-
-    r16 = r * 249 + 1014
-    g16 = (g * 253 + 505) >> 5
-    b16 = (b * 249 + 1014) >> 11
-
-    return (r16 & 0xF800) | (g16 & 0x7E0) | (b16 & 0x1F)
-
+from color16 import rgb24to16
 
 
 def convert_sprite(name, config, out):
