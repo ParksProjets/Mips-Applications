@@ -9,7 +9,9 @@
 .set $birdx, $16
 .set $birdy, $17
 .set $birdvel, $18
+
 .set $vga, $19
+.set $gameended, $26
 
 
 # General local registers
@@ -35,12 +37,21 @@
 .set $vgaendpos, $7
 .set $spritestart, $23
 .set $pixel, $22
+.set $color, $22
 .set $vgalineend, $25
+
 .set $width, $20
+.set $height, $25
 
 .set $spriteaddr, $25
 .set $savedvgapos, $30
 .set $spritetail, $4
+
+
+# Conditinal aliases
+.set $xcmp, $22
+.set $ycmp, $23
+.set $xcmpsh, $14
 
 
 # Function: 'calculate_vgaendpos'

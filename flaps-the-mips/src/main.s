@@ -25,10 +25,6 @@
 .text
 
 
-# For exporting this game
-.global flaps_the_mips_main
-flaps_the_mips_main:
-
 # Entry point.
 main:
 
@@ -79,6 +75,8 @@ wait_for_timer:  # Loop: wait for the next frame
     bne $tmp, $zero, wait_for_timer
 
 end_wait_for_timer:
+
+    .include "render/clear.s"
 
     .include "update/pipes.s"
 

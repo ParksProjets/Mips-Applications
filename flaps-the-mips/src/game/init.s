@@ -10,8 +10,7 @@
 # Initialize the game.
 init_game:
 
-    li $tmp, 50
-    sw $tmp, dPipes($zero)
+    li $gameended, 0
 
 
 init_bird:

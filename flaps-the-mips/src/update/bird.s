@@ -10,7 +10,8 @@
 # Update the bird.
 update_bird:
 
-user_input: # Manage the user input
+# Manage the user input
+user_input:
 
     lw $btns, kSwitchesAddress($zero)
     srl $btns, 16  # Get buttons value
@@ -26,20 +27,37 @@ user_buttons:
     lw $btndown, dBirdBtndown($zero)
     bne $btndown, $zero, after_user_buttons
 
+    beq $btns, $zero, after_user_buttons
+    bne $gameended, $zero, after_user_buttons  # If the game has ended
+
 jump_bird:
 
-    li $inputcounter, 5  # TODO: make a constant
+    li $inputcounter, kBirdAllowJump
+    addi $birdvel, (-kBirdJumpHeight)
 
 after_user_buttons:
 
     sw $btns, dBirdBtndown($zero)
-    addi $birdvel, -5*4
 
 after_user_input:
 
+    sw $inputcounter, dBirdInputcounter($zero)
+    
 
 
-update_bird_position: # Update the bird position
 
-    addi $birdvel, 2
+
+# Update the bird velocity
+update_bird_velocity:
+
+    addi $tmp, $birdvel, (-kBirdMaxVelocity)
+    bgez $tmp, update_bird_position
+
+    addi $birdvel, kBirdGravity
+
+
+
+# Update the bird position
+update_bird_position:
+
     add $birdy, $birdvel

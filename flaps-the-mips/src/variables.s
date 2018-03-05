@@ -26,6 +26,15 @@
 .set kBackgroundColor, 0x7E19
 
 
+# Bird velocities
+.set kBirdMaxVelocity, 12
+.set kBirdGravity, 1
+.set kBirdJumpHeight, 15
+
+# Number of frames between jumps
+.set kBirdAllowJump, 2
+
+
 
 # Bird information
 dBirdInputcounter: .word 0x0

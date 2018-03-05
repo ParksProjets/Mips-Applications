@@ -19,39 +19,49 @@ update_pipe_i: # Loop: update the i-th pipe
     lw $pipex, 0($addr)  # Load x pos
     lw $pipey, 4($addr)  # Load y pos
 
-    addi $pipex, $pipex, -2*4  # Update x pos -> x -= 3*4
+    bne $gameended, $zero, test_bird_collision  # If the game has ended
+    addi $pipex, $pipex, (-2 * 4)  # Update x pos -> x -= 2
 
 
 
-# test_bird_collision: # Test if the bird collidse the pipe
 
-#     # The bird collides the pipe if
-#     # x + 17 >= pipex && x <= pipex + 24 && (y < pipey || y + 12 > pipey + 45)
+# Test if the bird collides the pipe
+test_bird_collision:
 
-#     sub $xcmp, $pipex, $x
+    # The bird collides the pipe if
+    #   birdx + 17 >= pipex && birdx <= pipex + 24   and
+    #   birdy < pipey || birdy + 12 > pipey + 45
 
-#     addi $xcmpsh, $xcmp, -17*4
-#     bgtz $xcmpsh, bird_not_collide  # not (pipex - x - 7 <= 0)
+    sub $xcmp, $pipex, $birdx  # xcmp = pipex - birdx
 
-#     addi $xcmpsh, $xcmp, 24*4
-#     bltz $xcmpsh, bird_not_collide  # not (pipex - x + 24 >= 0)
+    addi $xcmpsh, $xcmp, (-17 * 4)
+    bgtz $xcmpsh, bird_not_collide  # not (pipex - birdx - 17 <= 0)
 
-#     sub $ycmp, $pipey, $y
-#     blez $ycmp, bird_not_collide  # not (pipey - y > 0)
+    addi $xcmpsh, $xcmp, (24 * 4)
+    bltz $xcmpsh, bird_not_collide  # not (pipex - birdx + 24 >= 0)
 
-#     addi $ycmp, $ycmp, (45-12)*4
-#     bgez $ycmp, bird_not_collide  # not (pipey - y + 45-12 < 0)
+    sub $ycmp, $pipey, $birdy  # ycmp = pipey - birdy
+    bgtz $ycmp, bird_collides  # (pipey - birdy > 0)
 
-#     # End of the game
-
-#     ledimm 0b1111  # TODO
-#     pause
-
-# bird_not_collide: # If the bird doesn't collide the pipe
+    addi $ycmp, $ycmp, ((45 - 12) * 4)
+    bgez $ycmp, bird_not_collide  # not (pipey - y + 45-12 < 0)
 
 
+bird_collides:
 
-rand_pipe: # Replace the pipe
+    # End of the game
+
+    li $gameended, 1
+
+    ledimm 0b1111  # TODO
+
+bird_not_collide: # If the bird doesn't collide the pipe
+
+
+
+
+# Replace the pipe
+rand_pipe:
 
     # addi $tmp, $pipex, 24*4
     addi $tmp, $pipex, 0
@@ -65,13 +75,15 @@ after_rand_pipe:
 
 
 
-# update_score: # Update the score
+# Update the score
+# update_score: 
 
 #     li $tmp, 74*4
 #     bne $x, $tmp, after_update_score # Update the score
 #     # TODO: score++
 
 # after_update_score:
+
 
 
     # Render the current pipe

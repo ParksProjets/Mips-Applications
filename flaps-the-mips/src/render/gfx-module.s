@@ -60,3 +60,29 @@ draw_sl_transparent2:
     bne $spriteaddr, $spriteend, draw_sprite_line_loop
 
     jr $ra  # Function return
+
+
+
+
+# Draw a rectangle on the screen.
+# Arguments: $color, $vgapos, $width, *$height
+# Used: $vgaendpos
+# Notes: $width is 4 bytes aligned but $height not.
+draw_rectangle:
+
+draw_rectangle_loop: # Loop: draw the rectange line by line
+
+    add $vgaendpos, $vgapos, $width
+
+draw_rectangle_line: # Loop: draw the line pixel by pixel
+
+    sw $color, -1($vgaendpos)  # Draw the right pixel
+
+    addi $vgaendpos, -4
+    bne $vgaendpos, $vgapos, draw_rectangle_line  # Draw the next pixel
+
+    addi $height, -1
+    addi $vgapos, (kSceneWith * 4)
+    bne $height, $zero, draw_rectangle_loop  # Draw the next line
+
+    jr $ra  # Function return

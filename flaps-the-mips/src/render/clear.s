@@ -1,14 +1,19 @@
 #
-#  Update the bird position.
+#  Clear the previous game frame.
 #
 #  Copyright (C) 2018, Guillaume Gonnet
 #  License MIT
 
-.file "render/bird.s"
+.file "render/clear.s"
 
 
-# Render the bird.
-render_bird:
+# Clear the previous game frame.
+clear:
+
+
+
+# Clear the bird.
+clear_bird:
 
     andi $tmp, $birdy, (~0b11 & 0xFFFF)
     sll $vgapos, $tmp, 8    # Calculate vgapos = 320 * birdy + birdx
@@ -17,9 +22,8 @@ render_bird:
     addu $tmp, $tmp, $vga
     addu $vgapos, $vgapos, $tmp
 
-    la $spriteaddr, sBirdData  # Load the 'bird' sprite
-    addi $spritetail, $spriteaddr, (sBirdHeight * sBirdWidth * 2)
-
     li $width, (sBirdWidth * 4)
+    li $height, (sBirdHeight)
+    li $color, (kBackgroundColor)
 
-    jal draw_sprite_fixed
+    jal draw_rectangle

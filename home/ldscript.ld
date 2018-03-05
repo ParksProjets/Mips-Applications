@@ -17,16 +17,18 @@ SECTIONS
         obj/startup.o (.text)
         obj/pong.o (.zdata)
         obj/home.o (.zdata)
-        obj/mips-invader.o (.text)
         obj/mips-invader.o (.data)
+        obj/mips-invader.o (.text)
     } > RAM0
 
     /* RAM1 memory data */
     . = 0x20000;
     .data : {
-        obj/screen-saver.o (.text)
         obj/home.o (.data)
         obj/home.o (.text)
+        obj/flaps-the-mips.o (.data)
+        obj/flaps-the-mips.o (.text)
+        obj/screen-saver.o (.text)
         obj/screen-saver.o (.data)
         obj/pong.o (.text)
         _gp = .;
