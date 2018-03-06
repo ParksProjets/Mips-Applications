@@ -15,7 +15,7 @@ import re
 
 from getobjsizes import get_sections_size_prefixed
 from sectionsutils import (split_sections, get_mem_sections as refine_sections,
-    sort_sections)
+    sort_sections, get_memory_usages)
 
 
 def read_ini(filename):
@@ -52,14 +52,16 @@ def gen_MEMORY(out, memories):
 
 
 
-def gen_SECTIONS(out, memories, sections):
+def gen_SECTIONS(out, memories, sections, usages):
     "Generate 'SECTIONS' part of the LD script."
 
     out.write("\nSECTIONS\n{\n")
     so = io.StringIO()
 
-    for mem, secs in zip(memories, sections):
-        so.write("\n    /* %s memory data */\n" % mem["name"])
+    for mem, secs, (usage, perc) in zip(memories, sections, usages):
+        so.write("\n    /* %s memory data (%dB used (%d%%)) */\n" %
+            (mem["name"], usage, perc))
+
         so.write("    . = 0x%0X;\n" % mem["origin"])
         so.write("    %s : {\n" % mem.get("sections", "%s.text" % mem["name"]))
 
@@ -86,10 +88,14 @@ def get_sections(apps, memconf):
     mems, spe = refine_sections(sections, memconf)
 
     memsecs = split_sections(sections, mems)
-    assert memsecs, "Not enought memory for storing all the apps"
+    assert memsecs, "Not enought memory space for storing all the apps"
+
+    usages = get_memory_usages(memconf, mems, memsecs, sections)
 
     sort_sections(memsecs)
-    return [spe[i][0] + secs + spe[i][1] for i, secs in enumerate(memsecs)]
+    secs = [spe[i][0] + secs + spe[i][1] for i, secs in enumerate(memsecs)]
+
+    return (secs, usages)
 
 
 
@@ -99,15 +105,15 @@ def genld(inname, outname, folder):
     memconf = read_config(inname)
     appconf = read_ini(path.join(folder, "#all-apps.ini"))
 
-    apps = re.findall("^\s*-\s*(.*)$", appconf.get("apps").strip(), re.M)
-    sections = get_sections(apps, memconf)
+    apps = re.findall("^\\s*-\\s*(.*)$", appconf.get("apps").strip(), re.M)
+    sections, usages = get_sections(apps, memconf)
 
     out = open(outname, "w")
     out.write("/*\n * This file has been generated automatically by genld.py\n")
     out.write(" * Configuration file: %s\n */\n\n" % path.basename(inname))
 
     gen_MEMORY(out, memconf)
-    gen_SECTIONS(out, memconf, sections)
+    gen_SECTIONS(out, memconf, sections, usages)
 
     out.close()
 

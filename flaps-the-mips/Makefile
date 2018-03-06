@@ -20,7 +20,7 @@ MIPSimu := ../../MIPSimu/build
 # Compile flags
 ASFLAGS = -G0 -mips32 -EB -mabi=32 -non_shared --warn -Isrc/
 LDFLAGS = -G0 -mips3 --static -T $(LD_SCRIPT)
-ODFLAGS = -d --section=.text -M no-aliases -M reg-names=numeric
+ODFLAGS = -d --section=.text --section=.data --section=.zdata -M no-aliases -M reg-names=numeric
 
 .PHONY: run copy dump clean
 

@@ -37,7 +37,7 @@ def main():
 
     appsfolder = path.abspath(path.join(here, "../apps"))
     if args.asm: args.asm = path.abspath(args.asm)
-    if args.ld: args.asm = path.abspath(args.ld)
+    if args.ld: args.ld = path.abspath(args.ld)
 
     genapps(appsfolder, args.asm, args.ld)
 

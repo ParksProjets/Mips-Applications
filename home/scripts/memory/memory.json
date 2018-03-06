@@ -4,7 +4,9 @@
     "origin": 0,
     "length": 8192,
     "begin": [
-        "section:obj/startup.o (.text)",
+        "section:obj/startup.o (.text)"
+    ],
+    "end": [
         "section:*.zdata"
     ]
 },

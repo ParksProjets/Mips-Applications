@@ -17,7 +17,7 @@
 
 
 # Application config
-.set kFramePerSecond, 30
+.set kFramePerSecond, 60 # 30
 
 
 .include "debug.s"
@@ -39,30 +39,6 @@ main:
 
     .include "game/init.s"
     .file "main.s"
-
-    # Fall through 'cleanup'
-
-
-
-# Clean the screen
-cleanup:
-
-    move $tmp, $vga
-    li $pixel, (kBackgroundColor)
-
-    li $tmp2, (4 * 320 * 240)  # TODO: constants
-    add $tmp2, $tmp2, $vga
-
-cleanup_loop:  # Loop: clean the screen pixel by pixel
-
-    sw $pixel, 0($tmp)
-
-    addi $tmp, $tmp, 4
-    bne $tmp, $tmp2, cleanup_loop
-
-end_cleanup_loop:
-
-    # Fall through 'main_loop'
 
 
 

@@ -76,4 +76,4 @@ $(OBJDIR):
 
 # Clean all generated files
 clean:
-	rm -f $(OBJDIR)/*.o $(OUT_NAME).elf $(LD_SCRIPT)
+	rm -f $(OBJDIR)/*.o $(OUT_NAME).elf $(LD_SCRIPT) $(SRCDIR)/menu/apps-data.s

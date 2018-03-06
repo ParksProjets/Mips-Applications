@@ -4,7 +4,7 @@
 #  Copyright (C) 2018, Guillaume Gonnet
 #  License MIT
 
-.section zdata
+.section .zdata
 
 
 # Scene size

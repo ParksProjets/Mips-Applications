@@ -48,16 +48,20 @@
 .set $spritetail, $4
 
 
-# Conditinal aliases
+# Conditional aliases
 .set $xcmp, $22
 .set $ycmp, $23
 .set $xcmpsh, $14
 
 
-# Function: 'calculate_vgaendpos'
-.set $y, $4
+# Pipe related aliases
 .set $spriteend, $5
 .set $spriteendcopy, $24
+
+
+# Ground related aliases
+.set $groundpos, $12
+.set $grounddiff, $13
 
 
 # Other

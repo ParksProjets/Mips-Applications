@@ -72,11 +72,27 @@ def get_mem_sections(sections, memconf):
 def sort_sections(memsections):
     "Sort the sections inside each memory."
 
-    pattern = ".*\(.([a-z][a-z0-9]*)\)$"
+    pattern = ".*\\(.([a-z][a-z0-9]*)\\)$"
     T = lambda s: SECTIONS_ORDER.index(re.match(pattern, s, re.I).group(1))
 
     for mem in memsections:
-        mem[0].sort(key=T, reverse=True)
+        mem.sort(key=T, reverse=True)
+
+
+
+def get_memory_usages(memconf, memories, memsections, sections):
+    "Get the memory space used by sections."
+
+    usages = []
+
+    for conf, realspace, secs in zip(memconf, memories, memsections):
+        usage = sum(sections[name] for name in secs)
+        usage += conf["length"] - realspace
+
+        perc = round((usage / conf["length"]) * 100)
+        usages.append((usage, perc))
+
+    return usages
 
 
 
