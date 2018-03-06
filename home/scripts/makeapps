@@ -26,10 +26,20 @@ def main():
     parser = argparse.ArgumentParser(prog="makeapps",
         description="Main script for generating the apps in the home menu.")
 
-    args = parser.parse_args()
+    args = parser.add_argument("-asm", default=None, metavar="filename",
+        help="Generate only the ASM data in *filename*.")
 
+    args = parser.add_argument("-ld", default=None, metavar="filename",
+        help="Generate only the LD script in *filename*.")
+
+    args = parser.parse_args()
     here = path.dirname(__file__)
-    genapps(path.abspath(path.join(here, "../apps")))
+
+    appsfolder = path.abspath(path.join(here, "../apps"))
+    if args.asm: args.asm = path.abspath(args.asm)
+    if args.ld: args.asm = path.abspath(args.ld)
+
+    genapps(appsfolder, args.asm, args.ld)
 
 
 if __name__ == "__main__":

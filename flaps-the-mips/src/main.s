@@ -76,8 +76,9 @@ wait_for_timer:  # Loop: wait for the next frame
 
 end_wait_for_timer:
 
-    .include "render/clear.s"
+    .include "render/ground.s"
 
+    .include "render/clear.s"
     .include "update/pipes.s"
 
     .include "update/bird.s"

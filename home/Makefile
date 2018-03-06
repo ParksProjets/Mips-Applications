@@ -37,11 +37,11 @@ $(OBJDIR)/$(OUT_NAME).elf: $(OBJDIR)/home.o $(OBJDIR)/$(STARTUP_OBJ) $(LD_SCRIPT
 
 # Create the LD script
 $(LD_SCRIPT): $(OBJDIR)/$(STARTUP_OBJ) $(OBJDIR)/home.o $(APPDIR)/*.ini
-	$(MAKEAPPS)
+	$(MAKEAPPS) -ld $@
 
 # Create the ASM data
 $(SRCDIR)/menu/apps-data.s: $(APPDIR)/*.ini
-	$(MAKEAPPS)
+	$(MAKEAPPS) -asm $@
 
 
 # Assemble Home Menu

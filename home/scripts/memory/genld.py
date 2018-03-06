@@ -14,7 +14,8 @@ import json
 import re
 
 from getobjsizes import get_sections_size_prefixed
-from sortsections import sort_sections, get_mem_sections as refine_sections
+from sectionsutils import (split_sections, get_mem_sections as refine_sections,
+    sort_sections)
 
 
 def read_ini(filename):
@@ -84,9 +85,10 @@ def get_sections(apps, memconf):
 
     mems, spe = refine_sections(sections, memconf)
 
-    memsecs = sort_sections(sections, mems)
+    memsecs = split_sections(sections, mems)
     assert memsecs, "Not enought memory for storing all the apps"
 
+    sort_sections(memsecs)
     return [spe[i][0] + secs + spe[i][1] for i, secs in enumerate(memsecs)]
 
 

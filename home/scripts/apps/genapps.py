@@ -25,21 +25,23 @@ from apps2obj import apps2obj
 from genld import genld
 
 
-def genapps(appsfolder):
+def genapps(appsfolder, outasm, ldscriptf):
     "Main script for generating the apps in the home menu."
 
     here = path.dirname(__file__)
 
-    outasm =  path.abspath(path.join(here, "../../src/menu/apps-data.s"))
-    apps2asm(appsfolder, outasm)
+    if outasm:
+        outasm = path.abspath(path.join(here, "../../src/menu/apps-data.s"))
+        apps2asm(appsfolder, outasm)
 
-    compiledf = path.abspath(path.join(here, "../../compiled"))
-    objf = path.abspath(path.join(here, "../../obj"))
-    apps2obj(appsfolder, compiledf, objf)
+    if ldscriptf:
+        compiledf = path.abspath(path.join(here, "../../compiled"))
+        objf = path.abspath(path.join(here, "../../obj"))
+        apps2obj(appsfolder, compiledf, objf)
 
-    memconfigf = path.abspath(path.join(here, "../memory/memory.json"))
-    ldscriptf = path.abspath(path.join(here, "../../ldscript.ld"))
-    genld(memconfigf, ldscriptf, appsfolder)
+    if ldscriptf:
+        memconfigf = path.abspath(path.join(here, "../memory/memory.json"))
+        genld(memconfigf, ldscriptf, appsfolder)
 
 
 
@@ -55,7 +57,11 @@ def main():
     args = parser.parse_args()
     here = path.dirname(__file__)
 
-    genapps(path.abspath(path.join(here, "../../", args.folder)))
+    appsfolder = path.abspath(path.join(here, "../../", args.folder))
+    outasm = path.abspath(path.join(here, "../../src/menu/apps-data.s"))
+    ldscriptf = path.abspath(path.join(here, "../../ldscript.ld"))
+
+    genapps(appsfolder, outasm, ldscriptf)
 
 
 if __name__ == "__main__":

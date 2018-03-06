@@ -53,7 +53,7 @@ def get_sections_size_prefixed(name):
     "Get the size of the sections in an OBJ file (prefixed)."
 
     prefix = "obj/%s.o (%%s)" % name
-    return { prefix % n: s for n, s in get_sections_size(name).items() }
+    return {prefix % n: s for n, s in get_sections_size(name).items()}
 
 
 

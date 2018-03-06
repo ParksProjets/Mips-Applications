@@ -9,8 +9,13 @@ License MIT
 """
 
 from collections import OrderedDict
+import re
 
 from lpsolve import LpEngine, LpVariable, LpConstraint
+
+
+# Section order (revered)
+SECTIONS_ORDER = ["bss", "rodata", "data", "sbss", "sdata", "text"]
 
 
 def filter_symbol(symbol, sections):
@@ -64,8 +69,19 @@ def get_mem_sections(sections, memconf):
 
 
 
-def sort_sections(sections, memories):
-    "Sort the sections in several memories."
+def sort_sections(memsections):
+    "Sort the sections inside each memory."
+
+    pattern = ".*\(.([a-z][a-z0-9]*)\)$"
+    T = lambda s: SECTIONS_ORDER.index(re.match(pattern, s, re.I).group(1))
+
+    for mem in memsections:
+        mem[0].sort(key=T, reverse=True)
+
+
+
+def split_sections(sections, memories):
+    "Split the sections in several memories."
 
     numsec = len(sections)
     nummem = len(memories)
