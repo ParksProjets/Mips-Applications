@@ -28,6 +28,8 @@ user_buttons:
     bne $btndown, $zero, after_user_buttons
 
     beq $btns, $zero, after_user_buttons
+
+    beq $gamestarted, $zero, after_user_buttons  # If the game has not started
     bne $gameended, $zero, after_user_buttons  # If the game has ended
 
 jump_bird:
@@ -50,6 +52,8 @@ after_user_input:
 # Update the bird velocity
 update_bird_velocity:
 
+    beq $gamestarted, $zero, after_update_bird  # The game has not started
+
     addi $tmp, $birdvel, (-kBirdMaxVelocity)
     bgez $tmp, update_bird_position
 
@@ -61,3 +65,6 @@ update_bird_velocity:
 update_bird_position:
 
     add $birdy, $birdvel
+
+
+after_update_bird:

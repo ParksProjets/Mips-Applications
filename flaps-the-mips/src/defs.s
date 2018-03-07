@@ -12,6 +12,7 @@
 
 .set $vga, $19
 .set $gameended, $26
+.set $gamestarted, $27
 
 
 # General local registers
@@ -55,8 +56,11 @@
 
 
 # Pipe related aliases
+.set $spritex, $6
+.set $newline, $20
 .set $spriteend, $5
 .set $spriteendcopy, $24
+.set $spritestartcopy, $30
 
 
 # Ground related aliases

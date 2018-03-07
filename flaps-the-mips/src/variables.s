@@ -7,9 +7,10 @@
 .section .zdata
 
 
-# Scene size
+# Scene/screen size
 .set kSceneWith, 320
 .set kSceneHeight, 188
+.set kScreenHeight, 240
 
 # Hardware information
 .set kClockFrequency, 50000000
@@ -25,6 +26,7 @@
 
 # Colors
 .set kBackgroundColor, 0x7E19
+.set kBottomColor, 0xDEB2
 
 
 # Bird velocities

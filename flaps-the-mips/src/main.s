@@ -17,7 +17,7 @@
 
 
 # Application config
-.set kFramePerSecond, 60 # 30
+.set kFramePerSecond, 30
 
 
 .include "debug.s"
@@ -51,6 +51,8 @@ wait_for_timer:  # Loop: wait for the next frame
     bne $tmp, $zero, wait_for_timer
 
 end_wait_for_timer:
+
+    .include "game/start.s"
 
     .include "render/ground.s"
 

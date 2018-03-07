@@ -10,6 +10,8 @@
 # Update the pipes.
 update_pipes:
 
+    beq $gamestarted, $zero, after_update_pipes  # If the game not started
+
     la $addr, (dPipes)
     la $endaddr, (dPipes + 8 * kNumberOfPipes)
 
@@ -63,8 +65,7 @@ bird_not_collide: # If the bird doesn't collide the pipe
 # Replace the pipe
 rand_pipe:
 
-    # addi $tmp, $pipex, 24*4
-    addi $tmp, $pipex, 0
+    addi $tmp, $pipex, (sPipeBodyWidth * 4)
     bgtz $tmp, after_rand_pipe
 
     li $pipex, (320 + 24)*4  # Reset pos -> x = 320*4
@@ -85,15 +86,17 @@ after_rand_pipe:
 # after_update_score:
 
 
+    sw $pipex, ($addr)  # Save new pipe position
+
 
     # Render the current pipe
     .include "render/pipes.s"
     .file "update-pipes.s"
 
 
-    sw $pipex, 0($addr)  # Save new pipe position
-
     addi $addr, $addr, 8  # $addr += 8
     bne $addr, $endaddr, update_pipe_i
 
-    # TODO
+
+after_update_pipes:
+

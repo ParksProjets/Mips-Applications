@@ -10,37 +10,56 @@
 # Render the i-th pipe
 render_pipe_i:
 
+    sra $spritex, $pipex, 1  # spritex = pipex / 2, beacause sprites are 2 bytes aligned
+
     addi $tmp, $pipex, (-kSceneWith * 4)  # Don't render a pipe that is not on the screen
     bgez $tmp, render_pipe_i_end
 
-    la $spritestart, sPipeBodyData  # TODO: move before loop
+    add $vgapos, $vga, $pipex
 
-    la $spriteend, (sPipeBodyData + sPipeBodyWidth*2)  # Default sprite width: full sprite
-    li $width, (sPipeBodyWidth * 4)
 
-    addi $tmp2, $tmp, (sPipeBodyWidth * 4)
-    blez $tmp2, draw_pipe_i_top  # If the pipe is on the right: crop the sprite
 
-    sub $width, $width, $tmp2
-    srl $tmp2, 1
-    sub $spriteend, $spriteend, $tmp2
+
+# Draw the body parts of the pipe
+draw_pipe_body:
+
+    li $newline, ((kSceneWith - sPipeBodyWidth) * 4)
+
+    la $spritestart, sPipeBodyData
+    addi $spriteend, $spritestart, (sPipeBodyWidth * 2)
+
+
+    bgez $spritex, draw_pipe_body_notleft
+
+    move $vgapos, $vga
+    sub $spritestart, $spritex
+    sub $newline, $pipex
+
+draw_pipe_body_notleft: # The pipe is not on the left
+
+    addi $tmp, $spritex, (-(kSceneWith - sPipeBodyWidth) * 2)
+    blez $tmp, draw_pipe_body_notright
+
+    sub $spriteend, $tmp
+    add $newline, $tmp
+    add $newline, $tmp
+
+draw_pipe_body_notright: # The pipe is not on the right
 
 
 
 # Draw the top part of the pipe
 draw_pipe_i_top:
 
-    add $vgapos, $vga, $pipex
     addi $i, $pipey, -10*4
 
 draw_pipe_i_top_loop: # Loop: repeat the sprite
 
     jal draw_sprite_line_safe
+    add $vgapos, $newline
 
-    addi $vgapos, (4 * kSceneWith)  # Draw next line
-    sub $vgapos, $vgapos, $width
     addi $i, -4
-    bne $i, $zero, draw_pipe_i_top_loop
+    bne $i, $zero, draw_pipe_i_top_loop  # Draw next line
 
     move $savedvgapos, $vgapos
 
@@ -49,7 +68,7 @@ draw_pipe_i_top_loop: # Loop: repeat the sprite
 # Draw the bottom part of the pipe
 draw_pipe_i_bottom:
 
-    li $tmp, (kSceneWith * 57 * 4)  # TODO: move before loop
+    li $tmp, (kSceneWith * 57 * 4)
     add $vgapos, $vgapos, $tmp
 
     addi $i, $pipey, -((kSceneHeight - 48) * 4)
@@ -57,11 +76,11 @@ draw_pipe_i_bottom:
 draw_pipe_i_bottom_loop: # Loop: repeat the sprite
 
     jal draw_sprite_line_safe
+    add $vgapos, $newline
 
-    addi $vgapos, (4 * kSceneWith)  # Draw next line
-    sub $vgapos, $vgapos, $width
     addi $i, 4
-    bne $i, $zero, draw_pipe_i_bottom_loop
+    bne $i, $zero, draw_pipe_i_bottom_loop  # Draw next line
+
 
 
 
@@ -70,60 +89,53 @@ render_pipe_ends:
 
     move $vgapos, $savedvgapos
 
-    la $spritestart, sPipeEndData  # Load the 'pipe-end' sprite
-    la $spriteend, (sPipeEndData + sPipeEndWidth*2)
-
-    addi $tmp, $width, (-sPipeEndWidth * 4)
-    beq $tmp, $zero, draw_pipe_i_topend  # If the pipe is on the right: crop the sprite
-
-    sra $tmp, 1
-    add $spriteend, $spriteend, $tmp
+    addi $spritestart, (sPipeEndData - sPipeBodyData)  # Load the 'pipe-end' sprite
+    addi $spriteend, (sPipeEndData - sPipeBodyData)
 
 
 
 # Draw the end part of the top pipe
 draw_pipe_i_topend:
 
+    move $spritestartcopy, $spritestart
     move $spriteendcopy, $spriteend
-    la $i, (sPipeEndData + (sPipeEndHeight * sPipeEndWidth * 2))  # TODO: rename $i
 
-draw_pipe_i_topend_loop: # Loop: TODO
+    addi $spritetail, $spritestart, (sPipeEndHeight * sPipeEndWidth * 2)
 
-    move $spriteaddr, $spritestart
-    jal draw_sprite_line
+draw_pipe_i_topend_loop: # Loop: draw all lines of the top
 
-    addi $vgapos, (4 * kSceneWith)  # Draw next line
-    sub $vgapos, $vgapos, $width
+    jal draw_sprite_line_safe
+    add $vgapos, $newline
 
-    addi $spriteend, $spriteend, (sPipeEndWidth * 2)
-    addi $spritestart, $spritestart, (sPipeEndWidth * 2)
+    addi $spriteend, (sPipeEndWidth * 2)
+    addi $spritestart, (sPipeEndWidth * 2)
 
-    bne $spritestart, $i, draw_pipe_i_topend_loop
+    bne $spritestart, $spritetail, draw_pipe_i_topend_loop
 
 
 
 # Draw the end part of the top pipe
 draw_pipe_i_bottomend:
 
+    move $spritestart, $spritestartcopy
     move $spriteend, $spriteendcopy
-    la $spritestart, sPipeEndData  # Load the 'pipe-end' sprite
+
+    addi $newline, (-2 * kSceneWith * 4)
 
     li $tmp, (kSceneWith * 44 * 4)
     add $vgapos, $vgapos, $tmp
 
-draw_pipe_i_bottomend_loop: # Loop: TODO
+draw_pipe_i_bottomend_loop: # Loop: draw all lines of the bottom
 
-    move $spriteaddr, $spritestart
-    jal draw_sprite_line
+    jal draw_sprite_line_safe
+    add $vgapos, $newline
 
-    addi $vgapos, (-4 * kSceneWith)  # Draw next line
-    sub $vgapos, $vgapos, $width
+    addi $spriteend, (sPipeEndWidth * 2)
+    addi $spritestart, (sPipeEndWidth * 2)
 
-    addi $spriteend, $spriteend, (sPipeEndWidth * 2)
-    addi $spritestart, $spritestart, (sPipeEndWidth * 2)
-
-    bne $spritestart, $i, draw_pipe_i_bottomend_loop
+    bne $spritestart, $spritetail, draw_pipe_i_bottomend_loop
 
 
 
+# The pipe rendering is done!
 render_pipe_i_end:

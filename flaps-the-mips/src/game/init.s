@@ -11,6 +11,7 @@
 init_game:
 
     li $gameended, 0
+    li $gamestarted, 0
 
 
 init_bird:
@@ -41,20 +42,24 @@ init_pipes: # The first 3 pipes are not random.
 # Clean the screen
 cleanup:
 
-    move $vgapos, $vga
-    addi $vgaendpos, $vgapos, (kSceneWith * kSceneHeight)
+    li $vgapos, (kVgaAddress + (kSceneWith * kScreenHeight * 4))
+    li $vgaendpos, (kVgaAddress + (kSceneWith * kSceneHeight * 4))
 
-    li $pixel, (kBackgroundColor)
+    li $pixel, (kBottomColor)
 
 cleanup_loop:  # Loop: clean the screen pixel by pixel
 
-    sw $pixel, ($tmp)
+    sw $pixel, -4($vgapos)
 
-    addi $vgapos, $tmp, 4
+    addi $vgapos, -4
     bne $vgapos, $vgaendpos, cleanup_loop
 
-    beq $vgapos, $vga  # Draw the second color
+    beq $vgapos, $vga, end_cleanup_loop  # Draw the second color
 
+    li $vgaendpos, (kVgaAddress + (kSceneWith * kScreenHeight * 4))
+    move $vgaendpos, $vga
+
+    li $pixel, (kBackgroundColor)
     j cleanup_loop
 
 end_cleanup_loop:
