@@ -95,34 +95,3 @@ end_draw_image_line:
 
     addi $vgapos, $vgapos, 4*(kScreenWidth-kImageWidth)  # Draw the next line
     bne $imgpos, $endimgpos, draw_whole_image
-
-end_draw_whole_image:
-
-    j main_loop
-
-
-
-# Clear a rectangle
-# Arguments: $vgapos, $lastvgapos, $clearstep
-clear_rect:
-
-clear_rect_loop:  # Loop: clear the image line by line
-
-    add $tmp, $lastvgapos, $clearstep
-    add $tmp2, $lastvgapos, (4 * kScreenWidth)
-
-clear_rect_line:  # Loop: clear the image pixel by pixel
-
-    sw $zero, 0($lastvgapos)
-
-    addi $lastvgapos, $lastvgapos, 4
-    bne $lastvgapos, $tmp, clear_rect_line  # Clear the next pixel
-
-end_clear_rect_line:
-
-    move $lastvgapos, $tmp2  # Clear the next line
-    bne $lastvgapos, $vgapos, clear_rect_loop
-
-end_clear_rect_loop:
-
-    jr $ra

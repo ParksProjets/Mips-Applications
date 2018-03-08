@@ -11,45 +11,8 @@
 # Include converted image
 .include "image.s"
 
-
-# Screen size
-.set kScreenWidth, 320
-.set kScreenHeight, 240
-
-# Hardware information
-.set kClockFrequency, 50000000
-
-# Peripheral addresses
-.set kTimerReadAddress, 0x4010
-.set kTimerPeriodAddress, 0x4010
-.set kTimerThresoldAddress, 0x4014
-.set kSwitchesAddress, 0x4004
-
-
-# Register aliases
-.set $vga, $16
-.set $x, $17
-.set $y, $18
-.set $dx, $19
-.set $dy, $20
-
-.set $endimgpos, $4
-.set $endwidth, $5
-.set $endheight, $6
-
-.set $vgapos, $8
-.set $lastvgapos, $9
-.set $pixels, $10
-.set $px, $11
-.set $vgapos2, $11
-.set $index, $12
-.set $lastvgapos2, $12
-.set $imgpos, $13
-.set $clearstep, $13
-.set $endlinepos, $14
-
-.set $tmp, $24
-.set $tmp2, $25
+# Defintions
+.include "defs.s"
 
 
 # Application options
@@ -62,6 +25,11 @@
 
 .text
 
+# Safe entry point (set $savedra)
+safe_main:
+
+    li $savedra, 0
+
 # Entry point of the application.
 main:
 
@@ -72,6 +40,9 @@ main:
 
     li $tmp, 200
     sw $tmp, kTimerThresoldAddress($zero)  # Set timer thresold
+
+    lw $lastbtn, kSwitchesAddress($zero)  # Load current btn state
+    srl $tmp, 16
 
     li $x, (4 * kStartPosX)  # Start positions
     li $y, (4 * kStartPosY)
@@ -85,8 +56,6 @@ main:
     li $endimgpos, (4 * kImageWidth * kImageHeight / kImagePixelsPerWord)
     li $endwidth, (4 * (kScreenWidth - kImageWidth))
     li $endheight, (4 * (kScreenHeight - kImageHeight))
-
-    # Fall through 'cleanup'
 
 
 
@@ -104,10 +73,6 @@ cleanup_loop:  # Loop: clean the screen pixel by pixel
     addi $tmp, $tmp, 4
     bne $tmp, $tmp2, cleanup_loop
 
-end_cleanup_loop:
-
-    # Fall through 'main_loop'
-
 
 
 # Main application loop
@@ -118,7 +83,22 @@ wait_for_timer:  # Loop: wait for the next frame
     lw $tmp, kTimerReadAddress($zero)
     bne $tmp, $zero, wait_for_timer
 
-end_wait_for_timer:
+end_wait_for_timer:    
 
     .include "update.s"
     .include "render.s"
+
+    move $tmp, $lastbtn
+
+    lw $lastbtn, kSwitchesAddress($zero)  # Load current btn state
+    srl $lastbtn, 16
+
+    bne $tmp, $zero, main_loop  # Prevent unwanted stop
+    beq $lastbtn, $zero, main_loop  # Stop when a button is pressed
+
+    jr $savedra
+
+
+
+# Libraries
+.include "gfx.s"

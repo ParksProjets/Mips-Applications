@@ -15,7 +15,7 @@ LD_SCRIPT := ldscript.ld
 SRCDIR := src
 OBJDIR := obj
 OUT_NAME := screensaver
-MIPSimu := ../MIPSimu/build
+MIPSimu := ../../MIPSimu/build
 
 # Compile flags
 ASFLAGS = -G0 -mips32 -EB -mabi=32 -non_shared --warn -Isrc/
@@ -36,7 +36,7 @@ $(OBJDIR)/main.o: $(SRCDIR)/main.s $(OBJDIR)
 
 # Run the program on MIPSimu
 run: copy
-	$(MIPSimu)/mipsimu $<
+	$(MIPSimu)/mipsimu $(MIPSimu)/$(OUT_NAME).bin
 
 # Create .bin file in MIPSimu build folder
 copy: $(MIPSimu)/$(OUT_NAME).bin

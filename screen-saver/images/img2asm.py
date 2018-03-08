@@ -32,7 +32,8 @@ def save_palette(out, palette, size):
         color = rgb24to16(*palette[i:i+3])
         data.append("0x%04X" % color)
 
-    out.write("\npalette: .word %s\n" % ", ".join(data))
+    out.write("\n.section .zdata\n\n")
+    out.write("palette: .word %s\n" % ", ".join(data))
 
 
 
@@ -66,7 +67,8 @@ def convert(out, imgname, colors):
     out.write(".set kImageWidth, %d\n" % image.width)
     out.write(".set kImageHeight, %d\n" % image.height)
     out.write(".set kImageAlign, %d\n" % align)
-    out.write(".set kImagePixelsPerWord, %d\n" % ppw)
+    out.write(".set kImagePixelsPerWord, %d\n\n" % ppw)
+    out.write(".data\n\n")
 
     pixels = []
     for y in range(image.height):
@@ -85,7 +87,6 @@ def img2asm(imgname, outname, colors):
     out.write("# Convertd using img2asm.py\n")
     out.write("# Input image: %s\n\n" % imgname)
 
-    out.write(".data\n\n")
     convert(out, imgname, colors)
     out.close()
 
@@ -99,7 +100,7 @@ def main():
 
     parser.add_argument("image", help="image file to convert")
 
-    parser.add_argument("-p", type=int, choices=(256, 64, 32), default=64,
+    parser.add_argument("-p", type=int, default=64,
         help="number of colors in the palette (default=64)")
 
     args = parser.parse_args()
