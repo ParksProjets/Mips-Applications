@@ -30,36 +30,44 @@ draw_app_i: # Draw the i-th app
     addi $i, -4
     bne $i, $zero, draw_app_i  # Draw the next app
 
-    # Fall through 'draw_bottom_btns'
 
 
-
-# Draw the bottom buttons
-draw_bottom_btns:
+# Draw the bottom images
+draw_bottom_images:
 
     li $y, (220 * 4)
-
-    la $imgstart, iLockData
-    addi $imgend, $imgstart, (iLockWidth * iLockHeight * 2)
-    li $width, (iLockWidth * 4)
-
     li $x, (20 * 4)
+
+    li $width, (iBottomImgWidth * 4)
+    li $i, (kBottomApps * 4)
+
+draw_bottom_img_i:
+
+    lw $imgstart, (iBottomImages - 4)($i)
+    addi $imgend, $imgstart, (iBottomImgWidth * iBottomImgHeight * 2)
+
     jal draw_image
+    addi $x, (kBottomBtnSpace * 4)
 
-    la $imgstart, iPowerData
-    addi $imgend, $imgstart, (iPowerWidth * iPowerHeight * 2)
-    li $width, (iPowerWidth * 4)
+    addi $i, -4
+    bne $i, $zero, draw_bottom_img_i  # Draw the next image
 
-    li $x, ((128 + 20) * 4)    
-    jal draw_image
 
+
+# Draw the bottom texts
+draw_bottom_texts:
 
     li $y, (223 * 4)
+    li $x, ((20 + iBottomImgWidth + 4) * 4)
 
-    la $text, tLockData
-    li $x, ((20 + iLockWidth + 4) * 4)
-    jal print_text
+    li $i, (kBottomApps * 4)
 
-    la $text, tPowerData
-    li $x, ((128 + 20 + iPowerWidth + 4) * 4)
+draw_bottom_text_i:
+
+    lw $text, (tBottomTexts - 4)($i)
+
     jal print_text
+    addi $x, (kBottomBtnSpace * 4)
+
+    addi $i, -4
+    bne $i, $zero, draw_bottom_text_i  # Draw the next text

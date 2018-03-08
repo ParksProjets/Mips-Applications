@@ -60,7 +60,8 @@ def main():
     if not args.n:
         args.n = args.input
 
-    gas2obj(path.abspath(path.join(here, "../..",args.input)), args.n)
+    folder = path.abspath(path.join(here, "../..", args.input))
+    gas2obj(folder, args.n)
 
 
 if __name__ == "__main__":

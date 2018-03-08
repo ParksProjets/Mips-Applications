@@ -18,6 +18,7 @@
 .set kTimerPeriodAddress, 0x4010
 .set kTimerThresoldAddress, 0x4014
 .set kSwitchesAddress, 0x4004
+.set kVgaAddress, 0x80000
 
 
 

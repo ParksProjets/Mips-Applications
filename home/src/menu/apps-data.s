@@ -9,4 +9,4 @@ kPongTitle: .word 0x191A1B04, 0x332A0112, 0x3A342801, 0x373A2A31
 kMipsInvaderTitle: .word 0x352E1804, 0x33140138, 0x2A29263B, 0x00000037
 
 kAppTexts: .word kMipsInvaderTitle, kPongTitle, kFlapsTheMipsTitle
-kAppEntries: .word __flaps_the_mips_main, __pong_main, __mips_invader_main, lock_system, blue_screen
+kAppEntries: .word __flaps_the_mips_main, __pong_main, __mips_invader_main, lock_system, blue_screen, about_page

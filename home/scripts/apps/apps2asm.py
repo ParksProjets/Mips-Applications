@@ -71,7 +71,7 @@ def apps2asm(infolder, outname):
         texts.append(text)
         entries.append(entry)
 
-    entries += ["lock_system", "blue_screen"]
+    entries += ["lock_system", "blue_screen", "about_page"]
 
     out.write("\nkAppTexts: .word %s\n" % ", ".join(reversed(texts)))
     out.write("kAppEntries: .word %s\n" % ", ".join(entries))

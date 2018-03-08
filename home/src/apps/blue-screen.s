@@ -4,7 +4,10 @@
 #  Copyright (C) 2018, Guillaume Gonnet
 #  License MIT
 
+.file "apps/blue-screen.s"
 
+
+# Configuration
 .set kBlueBackgroundColor, 0x0015
 .set kGrayBackgroundColor, 0xB574
 
@@ -17,22 +20,11 @@ blue_screen:
 lock_system:
 
 
-# Clear the screen in blue
-blue_screen_clear:
+    # Clear the screen in blue
+    li $color, (kBlueBackgroundColor)
+    jal clear_screen
 
-    li $pixel, (kBlueBackgroundColor)
-
-    move $tmp, $vga
-    li $tmp2, (4 * kScreenWidth * kScreenHeight)
-    add $tmp2, $tmp2, $vga
-
-blue_screen_clear_loop:  # Loop: clean the screen pixel by pixel
-
-    sw $pixel, ($tmp)
-
-    addi $tmp, $tmp, 4
-    bne $tmp, $tmp2, blue_screen_clear_loop
-
+    printimm 45
 
     # li $y, (50 * 4)
     # li $x, (20 * 4)
@@ -42,6 +34,8 @@ blue_screen_clear_loop:  # Loop: clean the screen pixel by pixel
     # li $width, 12
     # jal draw_rectangle  # Draw 'Windows' rectangle
 
+
+    li $color, 0xFFFF  # FIX ME
 
     li $y, (50 * 4)
     li $x, (20 * 4)

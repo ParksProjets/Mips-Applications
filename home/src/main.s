@@ -17,6 +17,7 @@
 .include "text/font-data.s"
 .include "text/text-data.s"
 .include "menu/apps-data.s"
+.include "menu/bottom-menu.s"
 
 .include "debug.s"
 
@@ -41,35 +42,19 @@ main:
     li $tmp, 200
     sw $tmp, kTimerThresoldAddress($zero)  # Set timer thresold
 
-    # Fall through 'cleanup'
 
 
-
-# First, cleaan the whole screen
+# First, clean the whole screen
 cleanup:
 
-    li $pixel, (kBackgroundColor)
-
-    move $tmp, $vga
-    li $tmp2, (4 * kScreenWidth * kScreenHeight)
-    add $tmp2, $tmp2, $vga
-
-cleanup_loop:  # Loop: clean the screen pixel by pixel
-
-    sw $pixel, ($tmp)
-
-    addi $tmp, $tmp, 4
-    bne $tmp, $tmp2, cleanup_loop
-
-end_cleanup_loop:
+    li $color, (kBackgroundColor)
+    jal clear_screen
 
     .include "menu/draw.s"
 
     li $cursorpos, 0
     li $prevcurpos, 1
     jal render_cursor_menu
-
-    # Fall through 'main_loop'
 
 
 
@@ -90,5 +75,8 @@ end_wait_for_timer:
 # Libraries
 .include "gfx/gfx.s"
 .include "gfx/image.s"
-.include "gfx/blue-screen.s"
 .include "text/text.s"
+
+# Applications
+.include "apps/blue-screen.s"
+.include "apps/about.s"

@@ -53,7 +53,7 @@ move_cursor_up:
 # Move the cursor down
 move_cursor_down:
 
-    li $tmp, (kNumberOfApps + 1)
+    li $tmp, (kNumberOfApps + 2)
     beq $prevcurpos, $tmp, main_loop
 
     addi $cursorpos, $prevcurpos, 1
@@ -108,7 +108,9 @@ calculate_cursor_pos:
 calculate_cursor_pos_bottom:
 
     li $y, (224 * 4)
-    sll $x, $botcurpos, 9  # x = cursorpos * 128 * 4
+    sll $x, $botcurpos, 8  # x = cursorpos * 64 * 4
+    sll $tmp, $botcurpos, 7  # tmp = cursorpos * 32 * 4
+    add $x, $tmp
     addi $x, ((20 - 8) * 4)
 
 render_cursor_fixed:

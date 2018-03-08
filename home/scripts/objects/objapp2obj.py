@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 """
 
-Fix an OBJ file to be linking properly.
+Fix an OBJ file for linking it properly.
 
 Copyright (C) 2018, Guillaume Gonnet
 License MIT
@@ -45,7 +45,7 @@ def copy_obj(inname, outname, redefs, globsymb):
 
 
 def objapp2obj(appsf, inf, outf, name):
-    "Fix an OBJ file to be linking properly."
+    "Fix an OBJ file for linking it properly."
 
     cname = path.join(appsf, "%s.ini" % name)
     assert path.isfile(cname), "File '%s.ini' doesn't exist" % name
@@ -71,9 +71,9 @@ def main():
     "Entry point of the application."
 
     parser = argparse.ArgumentParser(prog="objapp2obj",
-        description="Fix an OBJ file to be linking properly.")
+        description="Fix an OBJ file for linking it properly.")
 
-    parser.add_argument("name", help="input folder, from root")
+    parser.add_argument("name", help="name of the app")
 
     parser.add_argument("-a", default="apps", metavar="folder",
         help="folder containing the apps, from root (default=apps)")

@@ -11,24 +11,25 @@ MEMORY
 
 SECTIONS
 {
-    /* RAM0 memory data (8140B used (99%)) */
+    /* RAM0 memory data (7980B used (97%)) */
     . = 0x0;
     .text : {
         obj/startup.o (.text)
+        obj/home.o (.text)
         obj/mips-invader.o (.text)
-        obj/mips-invader.o (.data)
+        obj/flaps-the-mips.o (.text)
         obj/pong.o (.zdata)
+        obj/flaps-the-mips.o (.zdata)
         obj/home.o (.zdata)
     } > RAM0
 
-    /* RAM1 memory data (4212B used (13%)) */
+    /* RAM1 memory data (6104B used (19%)) */
     . = 0x20000;
     .data : {
         obj/pong.o (.text)
-        obj/flaps-the-mips.o (.text)
-        obj/home.o (.text)
-        obj/home.o (.data)
+        obj/mips-invader.o (.data)
         obj/flaps-the-mips.o (.data)
+        obj/home.o (.data)
         _gp = .;
     } > RAM1
 }
