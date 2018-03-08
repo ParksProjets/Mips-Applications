@@ -106,6 +106,8 @@ def genld(inname, outname, folder):
     appconf = read_ini(path.join(folder, "#all-apps.ini"))
 
     apps = re.findall("^\\s*-\\s*(.*)$", appconf.get("apps").strip(), re.M)
+    apps.append(appconf.get("lock"))
+
     sections, usages = get_sections(apps, memconf)
 
     out = open(outname, "w")

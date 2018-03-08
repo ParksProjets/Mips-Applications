@@ -62,7 +62,10 @@ def apps2asm(infolder, outname):
     assert path.isfile(infolder + "/#all-apps.ini"), "File #all-apps.ini is missing"
     config = read_ini(infolder + "/#all-apps.ini")
 
-    apps = re.findall("^\s*-\s*(.*)$", config.get("apps").strip(), re.M)
+    assert "apps" in config, "Please provide 'apps' in #all-apps.ini"
+    assert "lock" in config, "Please provide 'lock' in #all-apps.ini"
+
+    apps = re.findall("^\\s*-\\s*(.*)$", config.get("apps").strip(), re.M)
     out.write(".set kNumberOfApps, %d\n\n" % len(apps))
 
     texts, entries = ([], [])
@@ -71,7 +74,8 @@ def apps2asm(infolder, outname):
         texts.append(text)
         entries.append(entry)
 
-    entries += ["lock_system", "blue_screen", "about_page"]
+    lockobj = "__%s_main" % re.sub("[ -]", "_", config.get("lock"))
+    entries += [lockobj, "blue_screen", "about_page"]
 
     out.write("\nkAppTexts: .word %s\n" % ", ".join(reversed(texts)))
     out.write("kAppEntries: .word %s\n" % ", ".join(entries))

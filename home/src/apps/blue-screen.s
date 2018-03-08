@@ -11,44 +11,47 @@
 .set kBlueBackgroundColor, 0x0015
 .set kGrayBackgroundColor, 0xB574
 
+.set kBlueScreenTextColor, 0xFFFF
+
+
 
 # Do a blue screen and halt the system
 .global blue_screen
 blue_screen:
 
-.global lock_system
-lock_system:
-
-
     # Clear the screen in blue
     li $color, (kBlueBackgroundColor)
     jal clear_screen
 
-    printimm 45
 
-    # li $y, (50 * 4)
-    # li $x, (20 * 4)
-    # li $color, (kGrayBackgroundColor)
+    # Draw 'Windows' rectangle
+    li $y, (40 * 4)
+    li $x, (135 * 4)
+    li $color, (kGrayBackgroundColor)
 
-    # li $width, (50 * 4)
-    # li $width, 12
-    # jal draw_rectangle  # Draw 'Windows' rectangle
+    li $width, (49 * 4)
+    li $height, 14
+    jal draw_rectangle
 
 
-    li $color, 0xFFFF  # FIX ME
+    # Print the error message
+    li $color, (kBlueScreenTextColor)
 
-    li $y, (50 * 4)
+    li $y, (70 * 4)
     li $x, (20 * 4)
 
     la $text, (tBlueScreenData)
-    jal print_multiline_text  # Print error message
+    jal print_multiline_text
 
 
-    # li $y, (50 * 4)
-    # li $x, (20 * 4)
+    # Print 'Windows' in the gray rectangle
+    li $color, (kBlueBackgroundColor)
 
-    # la $text, (tWindowData)
-    # jal print_multiline_text  # Print error message
+    li $y, ((40 + 3) * 4)
+    li $x, ((135 + 6) * 4)
+
+    la $text, (tWindowData)
+    jal print_multiline_text  
 
 
-    j .  # Now halt
+    j .  # Now halt forever

@@ -17,7 +17,7 @@ from PIL import Image, ImageDraw, ImageFont
 
 # Character set
 CHAR_SET = (
-    " \"'-_+*/()."
+    " \"'-_+*/().,:"
     "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
     "abcdefghijklmnopqrstuvwxyz"
     "0123456789"

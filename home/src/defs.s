@@ -50,6 +50,8 @@
 .set $indexes, $24
 .set $vgasaved2, $25
 
+.set $hasnextline, $11
+
 
 # Graphics module aliases
 .set $width, $12

@@ -50,10 +50,10 @@ def apps2obj(appsf, inf, outf):
     "Convert all the apps into object files."
 
     conff = path.join(appsf, "#all-apps.ini")
-    assert path.isfile(conff), "File #all-apps.ini is missing"
     config = read_ini(conff)
 
-    apps = re.findall("^\s*-\s*(.*)$", config.get("apps").strip(), re.M)
+    apps = re.findall("^\\s*-\\s*(.*)$", config.get("apps").strip(), re.M)
+    apps.append(config.get("lock"))
 
     for name in apps:
         app2obj(appsf, inf, outf, name)

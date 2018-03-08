@@ -18,20 +18,20 @@
 
 # Print a multiline text on the screen.
 # Arguments: $text, $x, $y, $color
-# Used: same as 'print_text', $i
+# Used: same as 'print_text', $hasnextline
 print_multiline_text:
 
     move $savedra, $ra
 
 print_multiline_text_line: # Loop: print the text line by line
 
-    lw $i, ($text)
-    andi $i, (kMultilineContinuation)
+    lw $hasnextline, ($text)
+    andi $hasnextline, (kMultilineContinuation)
 
     jal print_text
 
     addi $y, (10 * 4)
-    bne $i, $zero, print_multiline_text_line
+    bne $hasnextline, $zero, print_multiline_text_line
 
     jr $savedra
 
@@ -69,8 +69,7 @@ print_charindex_word: # Loop: print all chars in the word
     sll $index, 3  # index *= 8
     srl $indexes, (kFontIndexLength)
 
-    move $vgasaved, $vgapos
-    move $vgasaved2, $vgasaved
+    move $vgasaved2, $vgapos
     li $i2, 2
 
 
