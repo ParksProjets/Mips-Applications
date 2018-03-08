@@ -8,7 +8,7 @@
 
 
 # Scene/screen size
-.set kSceneWith, 320
+.set kSceneWidth, 320
 .set kSceneHeight, 188
 .set kScreenHeight, 240
 
@@ -47,8 +47,16 @@ dBirdBtndown: .word 0x0
 # Ground position
 dGroundPos: .word 0x0
 
+# Score
+dScore: .word 0x0
+
 
 # Pipes
 # A pipe is an array of (x, y) coordonates.
 .set kNumberOfPipes, 3
 dPipes: .space kNumberOfPipes * 8
+
+
+# What is this? :)
+.set kNumberOfColors, 5
+dSomeColor: .word 0xDFE, 0xFC0, 0xF800, 0xA01F, 0xFFE0

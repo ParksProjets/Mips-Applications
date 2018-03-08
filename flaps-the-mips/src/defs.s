@@ -49,6 +49,13 @@
 .set $spritetail, $4
 
 
+# Text rendering special aliases
+.set $letteraddr, $25
+.set $letterend, $4
+.set $letterline, $23
+.set $letterindex, $20
+
+
 # Conditional aliases
 .set $xcmp, $22
 .set $ycmp, $23
@@ -68,9 +75,15 @@
 .set $grounddiff, $13
 
 
+# Score related registers
+.set $score, $6
+.set $scoredec, $21
+
+
 # Other
 .set $tmp, $24
 .set $tmp2, $25
+.set $gamemustend, $8
 
 
 

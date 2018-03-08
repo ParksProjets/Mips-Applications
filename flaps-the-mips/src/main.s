@@ -14,6 +14,8 @@
 
 # Generated data
 .include "render/sprites-data.s"
+.include "text/font-data.s"
+.include "text/palette.s"
 
 
 # Application config
@@ -62,9 +64,14 @@ end_wait_for_timer:
     .include "update/bird.s"
     .include "render/bird.s"
 
-    j main_loop
+    beq $gamemustend, $zero, main_loop
+
+    .include "game/end.s"
 
 
 
 # Libraries
 .include "render/gfx-module.s"
+.include "text/letter.s"
+.include "text/score.s"
+.include "game/you-won.s"

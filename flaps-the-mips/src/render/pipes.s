@@ -12,7 +12,7 @@ render_pipe_i:
 
     sra $spritex, $pipex, 1  # spritex = pipex / 2, beacause sprites are 2 bytes aligned
 
-    addi $tmp, $pipex, (-kSceneWith * 4)  # Don't render a pipe that is not on the screen
+    addi $tmp, $pipex, (-kSceneWidth * 4)  # Don't render a pipe that is not on the screen
     bgez $tmp, render_pipe_i_end
 
     add $vgapos, $vga, $pipex
@@ -23,7 +23,7 @@ render_pipe_i:
 # Draw the body parts of the pipe
 draw_pipe_body:
 
-    li $newline, ((kSceneWith - sPipeBodyWidth) * 4)
+    li $newline, ((kSceneWidth - sPipeBodyWidth) * 4)
 
     la $spritestart, sPipeBodyData
     addi $spriteend, $spritestart, (sPipeBodyWidth * 2)
@@ -37,7 +37,7 @@ draw_pipe_body:
 
 draw_pipe_body_notleft: # The pipe is not on the left
 
-    addi $tmp, $spritex, (-(kSceneWith - sPipeBodyWidth) * 2)
+    addi $tmp, $spritex, (-(kSceneWidth - sPipeBodyWidth) * 2)
     blez $tmp, draw_pipe_body_notright
 
     sub $spriteend, $tmp
@@ -68,7 +68,7 @@ draw_pipe_i_top_loop: # Loop: repeat the sprite
 # Draw the bottom part of the pipe
 draw_pipe_i_bottom:
 
-    li $tmp, (kSceneWith * 57 * 4)
+    li $tmp, (kSceneWidth * 57 * 4)
     add $vgapos, $vgapos, $tmp
 
     addi $i, $pipey, -((kSceneHeight - 48) * 4)
@@ -120,9 +120,9 @@ draw_pipe_i_bottomend:
     move $spritestart, $spritestartcopy
     move $spriteend, $spriteendcopy
 
-    addi $newline, (-2 * kSceneWith * 4)
+    addi $newline, (-2 * kSceneWidth * 4)
 
-    li $tmp, (kSceneWith * 44 * 4)
+    li $tmp, (kSceneWidth * 44 * 4)
     add $vgapos, $vgapos, $tmp
 
 draw_pipe_i_bottomend_loop: # Loop: draw all lines of the bottom

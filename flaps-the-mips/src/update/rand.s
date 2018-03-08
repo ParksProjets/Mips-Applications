@@ -7,10 +7,10 @@
 #  Copyright (C) 2018, Guillaume Gonnet
 #  License MIT
 
-.file "rand.s"
+.file "update/rand.s"
 
 
-.data
+.section .zdata
 
 # The state of the RNG is stored on only one word.
 # Values (1B each): x | y | z | a
@@ -45,4 +45,4 @@ rand:
     or $rngvals, $rngvals, $rngout  # Store 'a' back to $rngvals
     sw $rngvals, rngvalues($zero)
 
-    jal $ra  # ?
+    jal $ra  # Function return

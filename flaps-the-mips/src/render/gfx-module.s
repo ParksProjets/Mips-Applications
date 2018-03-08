@@ -20,7 +20,7 @@ draw_sprite_fixed_loop:
     add $spriteend, $spriteaddr, $tmp
     jal draw_sprite_line
 
-    addi $vgapos, $vgapos, (kSceneWith * 4)
+    addi $vgapos, $vgapos, (kSceneWidth * 4)
     sub $vgapos, $width
 
     bne $spriteaddr, $spritetail, draw_sprite_fixed_loop
@@ -82,7 +82,7 @@ draw_rectangle_line: # Loop: draw the line pixel by pixel
     bne $vgaendpos, $vgapos, draw_rectangle_line  # Draw the next pixel
 
     addi $height, -1
-    addi $vgapos, (kSceneWith * 4)
+    addi $vgapos, (kSceneWidth * 4)
     bne $height, $zero, draw_rectangle_loop  # Draw the next line
 
     jr $ra  # Function return

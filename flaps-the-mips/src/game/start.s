@@ -19,6 +19,13 @@ start_game:
     beq $btns, $zero, after_start_game
 
 
+    lw $btndown, dBirdBtndown($zero)
+    beq $btndown, $zero, starts_the_game  # Prevent unwanted starts
+
+    sw $btns, dBirdBtndown($zero)
+    j after_start_game
+
+
 starts_the_game: # Starts the game now!
 
     li $gamestarted, 1

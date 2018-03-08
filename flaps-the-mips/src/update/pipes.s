@@ -49,26 +49,23 @@ test_bird_collision:
     bgez $ycmp, bird_not_collide  # not (pipey - y + 45-12 < 0)
 
 
-bird_collides:
-
-    # End of the game
+bird_collides: # The end of the game is close...
 
     li $gameended, 1
 
-    ledimm 0b1111  # TODO
 
 bird_not_collide: # If the bird doesn't collide the pipe
 
 
 
 
-# Replace the pipe
+# Replace the pipe if it's on the left
 rand_pipe:
 
     addi $tmp, $pipex, (sPipeBodyWidth * 4)
     bgtz $tmp, after_rand_pipe
 
-    li $pipex, (320 + 24)*4  # Reset pos -> x = 320*4
+    li $pipex, ((320 + 6) * 4)  # Reset x position
 
     # TODO: random y and save it
 
@@ -76,27 +73,31 @@ after_rand_pipe:
 
 
 
+
 # Update the score
-# update_score: 
+update_score: 
 
-#     li $tmp, 74*4
-#     bne $x, $tmp, after_update_score # Update the score
-#     # TODO: score++
+    li $tmp, (150 * 4)
+    bne $pipex, $tmp, after_update_score # Update the score
 
-# after_update_score:
+    .include "game/score.s"
+    .file "update-pipes.s"
 
+after_update_score:
+
+
+
+
+# Now the render pipe
+end_update_pipe_i:
 
     sw $pipex, ($addr)  # Save new pipe position
-
 
     # Render the current pipe
     .include "render/pipes.s"
     .file "update-pipes.s"
 
-
     addi $addr, $addr, 8  # $addr += 8
     bne $addr, $endaddr, update_pipe_i
 
-
 after_update_pipes:
-

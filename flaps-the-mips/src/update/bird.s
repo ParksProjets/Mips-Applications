@@ -10,6 +10,10 @@
 # Update the bird.
 update_bird:
 
+    li $gamemustend, 0
+    
+
+
 # Manage the user input
 user_input:
 
@@ -47,15 +51,13 @@ after_user_input:
     
 
 
-
-
 # Update the bird velocity
 update_bird_velocity:
 
     beq $gamestarted, $zero, after_update_bird  # The game has not started
 
     addi $tmp, $birdvel, (-kBirdMaxVelocity)
-    bgez $tmp, update_bird_position
+    bgez $tmp, update_bird_position  # Minimum aloowed velocity
 
     addi $birdvel, kBirdGravity
 
@@ -65,6 +67,13 @@ update_bird_velocity:
 update_bird_position:
 
     add $birdy, $birdvel
+
+    addi $tmp, $birdy, (-(kSceneHeight - sBirdHeight - 1) * 4)
+
+    bltz $tmp, after_update_bird
+
+    sub $birdy, $tmp
+    li $gamemustend, 1
 
 
 after_update_bird:

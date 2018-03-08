@@ -23,7 +23,7 @@ after_reset_ground_pos:
 
     addi $grounddiff, $groundpos, (-sGroundWidth * 2)
 
-    li $vgapos, (kVgaAddress + (kSceneWith * (kSceneHeight - 1) * 4))  # FIX ME
+    li $vgapos, (kVgaAddress + (kSceneWidth * (kSceneHeight - 1) * 4))  # FIX ME
     la $spritestart, sGroundData
 
     addi $spritetail, $spritestart, (sGroundWidth * sGroundHeight * 2)
