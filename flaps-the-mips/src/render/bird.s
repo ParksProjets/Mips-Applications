@@ -17,9 +17,23 @@ render_bird:
     addu $tmp, $tmp, $vga
     addu $vgapos, $vgapos, $tmp
 
-    la $spriteaddr, sBirdData  # Load the 'bird' sprite
-    addi $spritetail, $spriteaddr, (sBirdHeight * sBirdWidth * 2)
 
-    li $width, (sBirdWidth * 4)
+    lw $tmp, dBirdState($zero)
+    addi $tmp, -1
+
+    bne $tmp, $zero, dont_reset_bird_state
+    li $tmp, (8 * 3 - 1)
+
+dont_reset_bird_state:
+
+    sw $tmp, dBirdState($zero)
+
+    srl $tmp, (3 - 2)
+    lw $spriteaddr, dBirdSprites($tmp)  # Load the 'bird' sprite
+
+    # la $spriteaddr, sBirdData  # Load the 'bird' sprite
+    addi $spritetail, $spriteaddr, (sBird0Height * sBird0Width * 2)
+
+    li $width, (sBird0Width * 4)
 
     jal draw_sprite_fixed

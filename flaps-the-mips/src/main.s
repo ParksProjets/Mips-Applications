@@ -15,6 +15,7 @@
 # Generated data
 .include "render/sprites-data.s"
 .include "text/font-data.s"
+.include "text/title-data.s"
 .include "text/palette.s"
 
 
@@ -35,9 +36,12 @@ main:
     li $tmp, (kClockFrequency / kFramePerSecond)
     sw $tmp, kTimerPeriodAddress($zero)  # Set timer period
 
-    li $tmp, 200
+    li $tmp, 10
     sw $tmp, kTimerThresoldAddress($zero)  # Set timer thresold
 
+    .include "text/splash.s"
+
+restart_game:
 
     .include "game/init.s"
     .file "main.s"
@@ -73,5 +77,7 @@ end_wait_for_timer:
 # Libraries
 .include "render/gfx-module.s"
 .include "text/letter.s"
+.include "text/image.s"
 .include "text/score.s"
+.include "text/title.s"
 .include "game/you-won.s"

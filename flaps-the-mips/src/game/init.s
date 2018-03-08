@@ -77,4 +77,4 @@ cleanup_loop:  # Loop: clean the screen pixel by pixel
 
 end_cleanup_loop:
 
-    jal draw_score  # Draw the score
+    jal draw_title  # Draw the title

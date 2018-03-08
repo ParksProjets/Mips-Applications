@@ -43,6 +43,9 @@
 dBirdInputcounter: .word 0x0
 dBirdBtndown: .word 0x0
 
+dBirdState: .word 0x1
+dBirdSprites: .word sBird2Data, sBird1Data, sBird0Data
+
 
 # Ground position
 dGroundPos: .word 0x0

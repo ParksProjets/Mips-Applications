@@ -30,5 +30,8 @@ starts_the_game: # Starts the game now!
 
     li $gamestarted, 1
 
+    jal clear_title  # Clear "the title
+    jal draw_score  # Draw the score
+
 
 after_start_game:

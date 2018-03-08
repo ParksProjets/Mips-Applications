@@ -22,8 +22,8 @@ clear_bird:
     addu $tmp, $tmp, $vga
     addu $vgapos, $vgapos, $tmp
 
-    li $width, (sBirdWidth * 4)
-    li $height, (sBirdHeight)
+    li $width, (sBird0Width * 4)
+    li $height, (sBird0Height)
     li $color, (kBackgroundColor)
 
     jal draw_rectangle

@@ -38,6 +38,7 @@
 .set $vgaendpos, $7
 .set $spritestart, $23
 .set $pixel, $22
+.set $pixel2, $9
 .set $color, $22
 .set $vgalineend, $25
 

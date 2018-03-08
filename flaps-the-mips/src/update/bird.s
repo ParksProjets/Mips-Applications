@@ -68,7 +68,7 @@ update_bird_position:
 
     add $birdy, $birdvel
 
-    addi $tmp, $birdy, (-(kSceneHeight - sBirdHeight - 1) * 4)
+    addi $tmp, $birdy, (-(kSceneHeight - sBird0Height - 1) * 4)
 
     bltz $tmp, after_update_bird
 

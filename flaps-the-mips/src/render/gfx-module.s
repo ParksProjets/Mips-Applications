@@ -12,19 +12,40 @@
 # Used: $tmp
 draw_sprite_fixed:
 
-    move $savedra, $ra
     srl $tmp, $width, 1
 
 draw_sprite_fixed_loop:
 
     add $spriteend, $spriteaddr, $tmp
-    jal draw_sprite_line
+
+
+draw_sprite_fixed_line: # Loop: draw the sprite line pixel by pixel
+
+    lw $pixel, ($spriteaddr)  # Load two pixels
+    andi $pixel2, $pixel, 0xFFFF
+
+    beq $pixel2, $zero, draw_sf_transparent1
+    sw $pixel2, ($vgapos)  # Draw p+0 (on LSB)
+
+draw_sf_transparent1:
+
+    srl $pixel, $pixel, 16  # Get second color in MSB
+
+    beq $pixel, $zero, draw_sf_transparent2
+    sw $pixel, 4($vgapos)  # Draw p+1
+
+draw_sf_transparent2:
+
+    addi $vgapos, $vgapos, 8
+    addi $spriteaddr, $spriteaddr, 4
+    bne $spriteaddr, $spriteend, draw_sprite_fixed_line  # Draw the next pixels
+
 
     addi $vgapos, $vgapos, (kSceneWidth * 4)
     sub $vgapos, $width
 
     bne $spriteaddr, $spritetail, draw_sprite_fixed_loop
-    j $savedra  # Function return
+    j $ra  # Function return
 
 
 
@@ -39,25 +60,17 @@ draw_sprite_line_safe:
 # Same but *$spriteaddr as argument.
 draw_sprite_line:
 
-draw_sprite_line_loop: # Loop: TODO
+draw_sprite_line_loop: # Loop: draw the sprite line pixel by pixel
 
     lw $pixel, ($spriteaddr)  # Load two pixels
-
-    beq $pixel, $zero, draw_sl_transparent1
     sw $pixel, ($vgapos)  # Draw p+0 (on LSB)
 
-draw_sl_transparent1:
-
     srl $pixel, $pixel, 16  # Get second color in MSB
-
-    beq $pixel, $zero, draw_sl_transparent2
     sw $pixel, 4($vgapos)  # Draw p+1
-
-draw_sl_transparent2:
 
     addi $vgapos, $vgapos, 8
     addi $spriteaddr, $spriteaddr, 4
-    bne $spriteaddr, $spriteend, draw_sprite_line_loop
+    bne $spriteaddr, $spriteend, draw_sprite_line_loop  # Draw the next pixels
 
     jr $ra  # Function return
 
