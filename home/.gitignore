@@ -1,6 +1,9 @@
 # Ignore object directories
-compiled/
+compiled/*.o
 obj/
+
+# But include Mips-Invader
+!compiled/mipsinvader.o
 
 # Ignore Python cache
 __pycache__
