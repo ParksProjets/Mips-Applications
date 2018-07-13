@@ -1,7 +1,7 @@
 # Applications
 
-This folder contains the configuration files for each the applications to include
-in the final build.
+This folder contains the configuration files for each application to include in
+the final build.
 
 Note that several applications can have the symbol `main`. All symbols of each
 application are localized (converted into local symbols), except the entry symbol
@@ -11,7 +11,8 @@ that is renamed.
 
 ## File `#all-apps.ini`
 
-This file contains the list the applications to include in the final app.
+This file contains the list the applications to include in the final app.  
+Application `lock` is the screen saver.
 
 
 
@@ -25,15 +26,15 @@ The following fields are required:
 
 
 The type `gas` indicates that the application is written in ASM and must be
-build with **GNU as**.  
-When type is `gas`, you can specify these additional fields:
+built with **GNU as**.  
+When type is `gas`, you can specify this additional field:
 
 - `directory` (optional) – Directory containing the ASM app (from root). By 
                            default it's `[app-name]`.
 
 
-The type `object` indicates that the application already compiled into an `.o`
+The type `object` indicates that the application is already compiled into a `.o`
 file in the `compiled` folder.  
-When type is `object`, you can specify these additional fields:
+When type is `object`, you can specify this additional field:
 
 - `obj-name` (optional) – Name of the object file. By default it's `[app-name].o`.

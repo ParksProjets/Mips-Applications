@@ -1,18 +1,20 @@
 # MIPS applications
 
-This repository contains some MIPS applications.
-
+This repository contains some MIPS applications.  
 You can run these programs on **[MIPSimu][MIPSimu]**.
 
 
 
 ## Applications
 
-Here is the list of available applications.
+Here is the list of available applications.  
+Each application have its own `README`.
 
 - **Screen Saver** – A Windows XP like screen saver.
 
 - **Flaps The Mips** – A [Flappy Bird][FlappyBird] like game.
+
+- **Pong** – A pong game (Video Olympics like version).
 
 - **Home** – A home menu for launching all applications above.
 
