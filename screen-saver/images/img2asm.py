@@ -8,6 +8,7 @@ License MIT
 
 """
 
+import os.path as path
 import argparse
 from math import log2, floor
 from PIL import Image
@@ -103,8 +104,10 @@ def main():
     parser.add_argument("-p", type=int, default=64,
         help="number of colors in the palette (default=64)")
 
+    here = path.dirname(__file__)
     args = parser.parse_args()
-    img2asm(args.image, "../src/image.s", args.p)
+
+    img2asm(args.image, path.join(here, "../src/image.s"), args.p)
 
 
 if __name__ == "__main__":

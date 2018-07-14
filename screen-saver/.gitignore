@@ -1,5 +1,2 @@
 # Ignore object directory
 obj/
-
-# Ignore some compromising images :/
-images/frederic.png
