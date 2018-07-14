@@ -7,3 +7,6 @@ obj/
 
 # Ignore Python cache
 __pycache__
+
+# Ignore generated LD scripts.
+/ldscript.ld
