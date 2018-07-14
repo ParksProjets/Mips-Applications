@@ -15,12 +15,12 @@
 # Increment the score
 increment_score:
 
-    lw $score, dScore($zero)
+    lw $score, dScore($zero)  # Load the current score
 
-    addi $tmp, $score, (-99 * 4)  # Maximum score
-    beq $tmp, $zero, you_won
+    addi $tmp, $score, (99 * -4)  # Maximum score (cheaters, don't change this value please).
+    beq $tmp, $zero, you_won  # If the player has a score > 100
 
-    addi $score, 4
-    sw $score, dScore($zero)
+    addi $score, 4  # Increment the score
+    sw $score, dScore($zero)  # Save the new score
 
-    jal draw_score
+    jal draw_score  # Update the score display

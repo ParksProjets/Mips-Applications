@@ -10,9 +10,9 @@
 # Render the i-th pipe
 render_pipe_i:
 
-    sra $spritex, $pipex, 1  # spritex = pipex / 2, beacause sprites are 2 bytes aligned
+    sra $spritex, $pipex, 1  # spritex = pipex / 2, beacause sprites are 2 bytes aligned.
 
-    addi $tmp, $pipex, (-kSceneWidth * 4)  # Don't render a pipe that is not on the screen
+    addi $tmp, $pipex, (-kSceneWidth * 4)  # Don't render a pipe that is not on the screen.
     bgez $tmp, render_pipe_i_end
 
     add $vgapos, $vga, $pipex
@@ -35,7 +35,7 @@ draw_pipe_body:
     sub $spritestart, $spritex
     sub $newline, $pipex
 
-draw_pipe_body_notleft: # The pipe is not on the left
+draw_pipe_body_notleft: # The pipe is not on the left.
 
     addi $tmp, $spritex, (-(kSceneWidth - sPipeBodyWidth) * 2)
     blez $tmp, draw_pipe_body_notright
@@ -44,7 +44,7 @@ draw_pipe_body_notleft: # The pipe is not on the left
     add $newline, $tmp
     add $newline, $tmp
 
-draw_pipe_body_notright: # The pipe is not on the right
+draw_pipe_body_notright: # The pipe is not on the right.
 
 
 
@@ -79,7 +79,7 @@ draw_pipe_i_bottom_loop: # Loop: repeat the sprite
     add $vgapos, $newline
 
     addi $i, 4
-    bne $i, $zero, draw_pipe_i_bottom_loop  # Draw next line
+    bne $i, $zero, draw_pipe_i_bottom_loop  # Draw next line.
 
 
 
@@ -89,12 +89,12 @@ render_pipe_ends:
 
     move $vgapos, $savedvgapos
 
-    addi $spritestart, (sPipeEndData - sPipeBodyData)  # Load the 'pipe-end' sprite
+    addi $spritestart, (sPipeEndData - sPipeBodyData)  # Load the 'pipe-end' sprite.
     addi $spriteend, (sPipeEndData - sPipeBodyData)
 
 
 
-# Draw the end part of the top pipe
+# Draw the end part of the top pipe.
 draw_pipe_i_topend:
 
     move $spritestartcopy, $spritestart
@@ -102,7 +102,7 @@ draw_pipe_i_topend:
 
     addi $spritetail, $spritestart, (sPipeEndHeight * sPipeEndWidth * 2)
 
-draw_pipe_i_topend_loop: # Loop: draw all lines of the top
+draw_pipe_i_topend_loop: # Loop: draw all lines of the top.
 
     jal draw_sprite_line_safe
     add $vgapos, $newline
@@ -114,7 +114,7 @@ draw_pipe_i_topend_loop: # Loop: draw all lines of the top
 
 
 
-# Draw the end part of the top pipe
+# Draw the end part of the top pipe.
 draw_pipe_i_bottomend:
 
     move $spritestart, $spritestartcopy
@@ -125,7 +125,7 @@ draw_pipe_i_bottomend:
     li $tmp, (kSceneWidth * 44 * 4)
     add $vgapos, $vgapos, $tmp
 
-draw_pipe_i_bottomend_loop: # Loop: draw all lines of the bottom
+draw_pipe_i_bottomend_loop: # Loop: draw all lines of the bottom.
 
     jal draw_sprite_line_safe
     add $vgapos, $newline

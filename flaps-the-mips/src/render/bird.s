@@ -10,6 +10,7 @@
 # Render the bird.
 render_bird:
 
+    # Calculate the screen position of the bird.
     andi $tmp, $birdy, (~0b11 & 0xFFFF)
     sll $vgapos, $tmp, 8    # Calculate vgapos = 320 * birdy + birdx
     sll $tmp, $tmp, 6       #   320 = 2^8 + 2^6

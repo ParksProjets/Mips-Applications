@@ -1,5 +1,5 @@
 #
-#  When the player won the game (score = 100)
+#  When the player won the game (score = 100).
 #
 #  Copyright (C) 2018, Guillaume Gonnet
 #  License MIT
@@ -7,7 +7,8 @@
 .file "you-won.s"
 
 
-# When someone won (score = 100)
+# When someone won (score = 100).
+# This code is not commented to keep the surprise ^^
 you_won:
 
     li $vgaendpos, (kVgaAddress + (kSceneWidth * kScreenHeight * 4))

@@ -7,11 +7,11 @@
 .file "render/ground.s"
 
 
-# Render the ground
+# Render the ground.
 render_ground:
 
     lw $groundpos, dGroundPos($zero)
-    bne $gameended, $zero, after_render_ground  # If the game has ended
+    bne $gameended, $zero, after_render_ground  # If the game has ended.
 
     addi $groundpos, (-2 * 2)  # Texture is 2 byte aligned
 

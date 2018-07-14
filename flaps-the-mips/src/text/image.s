@@ -9,6 +9,7 @@
 
 # Draw an image on the screen
 # Arguments: *$spriteaddr, $spritetail, $vgapos, $width, $tmp
+# Used: TODO
 # Notes: $width is 4 bytes aligned
 draw_image:
 

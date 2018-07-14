@@ -7,6 +7,10 @@
 .file "text/splash.s"
 
 
+# These data contain the text of the splash-screen.
+# This project is open-source, so you are free to change the splash screen (as long as you
+# follow the terms of the MIT license). But having your name at the beginning of the game
+# must be earned, you will have to find out how to do it yourself.
 .data
 
 .set iSplashWidth, 185
@@ -22,11 +26,11 @@ iSplashData: .word 0xFFFFF55F, 0xFD5555FF, 0xFFFFFFFF, 0xFFFFFFFF, 0x55FFFFFF, 0
 
 .text
 
-# Draw the splash
+# Draw the splash-screen.
 draw_splash:
 
 
-# Clean the screen first
+# Clean the screen first.
 splash_cleanup:
 
     li $color, (kBackgroundColor)
@@ -37,33 +41,33 @@ splash_cleanup_loop:  # Loop: clean the screen pixel by pixel
     sw $color, -4($vgapos)
 
     addi $vgapos, -4
-    bne $vgapos, $vga, splash_cleanup_loop # Draw the next pixel
+    bne $vgapos, $vga, splash_cleanup_loop  # Draw the next pixel.
 
 
 
 # Draw the splash text
 draw_splash_text:
 
-    la $spriteaddr, iSplashData
+    la $spriteaddr, iSplashData  # Get splash-screen start and end addresses.
     addi $spritetail, $spriteaddr, (iSplashNumWords * 4)
 
-    li $width, (iSplashWidth * 4)
-    li $tmp, (((iSplashWidth / 16) + 1) * 4)
+    li $width, (iSplashWidth * 4)  # Width of the image (4 bytes aligned).
+    li $tmp, (((iSplashWidth / 16) + 1) * 4)  # Width of a line (4 bytes aligned).
 
     li $vgapos, (kVgaAddress + (kSceneWidth * kSplashPosY + kSplashPosX) * 4)
-    jal draw_image
+    jal draw_image  # Draw the image.
 
 
 
 # Wait for the timer
 draw_splash_wait:
 
-    li $i, (kFramePerSecond * 2)
+    li $i, (kFramesPerSecond * 2)  # Wait for 2s (2 * number of fps).
 
 draw_splash_wait_loop:
 
     lw $tmp, kTimerReadAddress($zero)
-    bne $tmp, $zero, draw_splash_wait_loop
+    bne $tmp, $zero, draw_splash_wait_loop  # Wait for a frame.
 
-    addi $i, -1
-    bne $i, $zero, draw_splash_wait_loop
+    addi $i, -1  # Decrement the timer.
+    bne $i, $zero, draw_splash_wait_loop  # If the timer is not 0: wait for next frame.

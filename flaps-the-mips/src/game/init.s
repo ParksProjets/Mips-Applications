@@ -10,17 +10,17 @@
 # Initialize the game.
 init_game:
 
-    li $gameended, 0
+    li $gameended, 0  # The game hasn't started nor ended.
     li $gamestarted, 0
 
-    lw $btns, kSwitchesAddress($zero)
-    srl $btns, 16  # Get buttons value
+    lw $btns, kSwitchesAddress($zero)  # Save initial buttons state.
+    srl $btns, 16  # Get buttons value.
     sw $btns, dBirdBtndown($zero)
 
 
 init_score:
 
-    li $score, 0
+    li $score, 0  # Store initial score: 0.
     sw $score, dScore($zero)
 
 
@@ -29,26 +29,26 @@ init_bird:
     sw $zero, dBirdInputcounter($zero)
     li $birdvel, 0
 
-    li $birdx, (160 * 4)
+    li $birdx, (160 * 4)  # Bird position.
     li $birdy, (100 * 4)
 
 
 init_pipes: # The first 3 pipes are not random.
 
     li $tmp, ((320 + 10) * 4)
-    sw $tmp, (dPipes + 0)($zero)  # First pipe x
+    sw $tmp, (dPipes + 0)($zero)  # First pipe x.
     li $tmp, 60*4
-    sw $tmp, (dPipes + 4)($zero)  # First pipe y
+    sw $tmp, (dPipes + 4)($zero)  # First pipe y.
 
     li $tmp, ((320 + 128) * 4)
-    sw $tmp, (dPipes + 8)($zero)  # Second pipe x
+    sw $tmp, (dPipes + 8)($zero)  # Second pipe x.
     li $tmp, 105*4
-    sw $tmp, (dPipes + 12)($zero)  # Second pipe y
+    sw $tmp, (dPipes + 12)($zero)  # Second pipe y.
 
     li $tmp, ((320 + 246) * 4)
-    sw $tmp, (dPipes + 16)($zero)  # Third pipe x
+    sw $tmp, (dPipes + 16)($zero)  # Third pipe x.
     li $tmp, 35*4
-    sw $tmp, (dPipes + 20)($zero)  # Third pipe y
+    sw $tmp, (dPipes + 20)($zero)  # Third pipe y.
 
 
 

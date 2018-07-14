@@ -105,7 +105,7 @@ end_update_pipe_i:
     .include "render/pipes.s"
     .file "update-pipes.s"
 
-    addi $addr, $addr, 8  # $addr += 8
+    addi $addr, 8  # $addr += 8
     bne $addr, $endaddr, update_pipe_i
 
 after_update_pipes:

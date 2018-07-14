@@ -20,11 +20,10 @@
 
 
 # Application config
-.set kFramePerSecond, 30
+.set kFramesPerSecond, 30
 
 
 .include "debug.s"
-
 .text
 
 
@@ -33,7 +32,7 @@ main:
 
     lui $vga, 8  # VGA memory
 
-    li $tmp, (kClockFrequency / kFramePerSecond)
+    li $tmp, (kClockFrequency / kFramesPerSecond)
     sw $tmp, kTimerPeriodAddress($zero)  # Set timer period
 
     li $tmp, 10
@@ -70,7 +69,7 @@ end_wait_for_timer:
     .include "update/bird.s"
     .include "render/bird.s"
 
-    beq $gamemustend, $zero, main_loop
+    beq $gamemustend, $zero, main_loop  # While the game hasn't ended: update it
 
     .include "game/end.s"
 
