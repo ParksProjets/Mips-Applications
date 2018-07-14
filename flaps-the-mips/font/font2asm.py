@@ -8,6 +8,7 @@ License MIT
 
 """
 
+import os.path as path
 import argparse
 from PIL import Image
 
@@ -101,8 +102,11 @@ def main():
     parser.add_argument("input", default="font.png", nargs="?",
         help="input image font (default=font.png)")
 
+    here = path.dirname(__file__)
     args = parser.parse_args()
-    font2asm(args.input, "../src/text/font-data.s")
+
+    out = path.join(here, "../src/text/font-data.s")
+    font2asm(path.join(here, args.input), out)
 
 
 if __name__ == "__main__":

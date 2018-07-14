@@ -8,6 +8,7 @@ License MIT
 
 """
 
+import os.path as path
 import argparse
 import configparser
 from PIL import Image
@@ -32,7 +33,8 @@ def convert_sprite(name, config, out):
 
     prefix = config["prefix"]
 
-    image = Image.open(config["file"])
+    here = path.dirname(__file__)
+    image = Image.open(path.join(here, config["file"]))
 
     out.write(".set %sWidth, %d\n" % (prefix, image.width))
     out.write(".set %sHeight, %d\n" % (prefix, image.height))
@@ -74,11 +76,12 @@ def main():
         help="configuration file (default=sprites.ini)")
 
     args = parser.parse_args()
+    here = path.dirname(__file__)
 
     config = configparser.ConfigParser()
-    config.read(args.config)
+    config.read(path.join(here, args.config))
 
-    sprites2asm(config, "../src/render/sprites-data.s")
+    sprites2asm(config, path.join(here, "../src/render/sprites-data.s"))
 
 
 if __name__ == "__main__":

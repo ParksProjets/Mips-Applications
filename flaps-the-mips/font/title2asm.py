@@ -8,6 +8,7 @@ License MIT
 
 """
 
+import os.path as path
 import argparse
 from PIL import Image
 
@@ -94,8 +95,11 @@ def main():
     parser.add_argument("input", default="title.png", nargs="?",
         help="input image text (default=title.png)")
 
+    here = path.dirname(__file__)
     args = parser.parse_args()
-    title2asm(args.input, "../src/text/title-data.s")
+
+    out = path.join(here, "../src/text/title-data.s")
+    title2asm(path.join(here, args.input), out)
 
 
 if __name__ == "__main__":

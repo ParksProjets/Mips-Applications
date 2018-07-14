@@ -10,3 +10,10 @@ You can regenerate the assembly file with the following command:
 ```sh
 python3 font2asm.py
 ```
+
+The title of the game is in file `title.png`. Colors are the same as `font.png`
+image.  
+You can regenerate the assembly file with the following command:
+```sh
+python3 title2asm.py
+```
