@@ -2,6 +2,8 @@
 
 **Flaps The Mips** is a [Flappy Bird][FlappyBird] like game.
 
+![](preview.gif)
+
 
 
 ## Build this project

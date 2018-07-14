@@ -3,6 +3,8 @@
 The program is an application launcher. It requires an additional memory of
 32 Ko (use option `--r2` in **MIPSimu**).
 
+![](preview.gif)
+
 
 
 ## Build the home menu
