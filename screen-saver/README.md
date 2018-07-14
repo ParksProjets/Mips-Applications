@@ -1,5 +1,9 @@
 # ScreenSaver for MIPS
 
+![](preview.gif)
+
+
+
 ## Build this project
 
 This project use **GNU make**.  
