@@ -67,7 +67,15 @@ rand_pipe:
 
     li $pipex, ((320 + 6) * 4)  # Reset x position
 
-    # TODO: random y and save it
+
+    # We rand the y position.
+    # This position must have a value bewteen 11 and 139
+    jal rand 
+
+    srl $pipey, $rngout, 1  # pipey = rngout // 2
+    addi $pipey, 11  # pipey += 11
+    sll $pipey, $pipey, 2  # pipey *= 4
+    sw $pipey, 4($addr)  # Store y pos
 
 after_rand_pipe:
 

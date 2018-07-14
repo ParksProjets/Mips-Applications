@@ -33,6 +33,14 @@
 .set $inputcounter, $13
 
 
+# Rand special aliases
+.set $rngvals, $24
+.set $rngx, $22
+.set $rnga, $23
+.set $rngt, $14
+.set $rngout, $4
+
+
 # Render special aliases
 .set $vgapos, $14
 .set $vgaendpos, $7

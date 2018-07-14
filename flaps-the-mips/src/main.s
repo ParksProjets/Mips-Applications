@@ -58,6 +58,8 @@ wait_for_timer:  # Loop: wait for the next frame
 
 end_wait_for_timer:
 
+    jal rand  # Update the RNG: pipes will be more "random"
+
     .include "game/start.s"
 
     .include "render/ground.s"
@@ -76,6 +78,7 @@ end_wait_for_timer:
 
 # Libraries
 .include "render/gfx-module.s"
+.include "update/rand.s"
 .include "text/letter.s"
 .include "text/image.s"
 .include "text/score.s"

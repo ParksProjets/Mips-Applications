@@ -14,7 +14,7 @@
 
 # The state of the RNG is stored on only one word.
 # Values (1B each): x | y | z | a
-rngvalues: .word 0x00000001
+rngvalues: .word 0x12345678
 
 
 
@@ -27,11 +27,11 @@ rand:
 
     lw $rngvals, rngvalues($zero)
 
-    srl $rngt, $rngvals, 16  # t = x
+    srl $rngt, $rngvals, 24  # t = x
     sll $rngx, $rngt, 4  # x << 4
     xor $rngt, $rngt, $rngx  # t ^= (x << 4)
 
-    andi $rnga, $rngvals, 0xFF  # a = z
+    andi $rnga, $rngvals, 0xFF  # get a (z after)
     sll $rngvals, $rngvals, 8  # x = y, y = z, z = a
 
     xor $rngout, $rnga, $rngt  # out = z ^ t
@@ -40,9 +40,10 @@ rand:
     xor $rngout, $rngout, $rnga  # out ^= (z >> 1)
 
     sll $rngt, $rngt, 1  # t << 1
-    xor $rngout, $rnga, $rngt  # out ^= (t << 1)
+    xor $rngout, $rngout, $rngt  # out ^= (t << 1)
+    andi $rngout, $rngout, 0xFF  # out &= 0xFF (only 8 bits result)
 
     or $rngvals, $rngvals, $rngout  # Store 'a' back to $rngvals
     sw $rngvals, rngvalues($zero)
 
-    jal $ra  # Function return
+    jr $ra  # Function return
