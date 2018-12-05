@@ -57,7 +57,7 @@ update_right_paddle:
 
 
 
-# Normal CPU reaction
+# Normal CPU reaction.
 cpu_normal_reaction:
 
     addi $cpuskip, -1
@@ -69,7 +69,7 @@ cpu_normal_reaction:
 
 
 
-# Quick CPU reaction
+# Quick CPU reaction.
 cpu_quick_reaction:
 
     sub $tmp2, $bally, $paddley
@@ -86,18 +86,18 @@ cpu_quick_move_bottom:
 
 
 
-# Limit right paddle betwwen 0 and height
+# Limit right paddle between 0 and height.
 limit_right_paddle:
 
 limit_right_paddle_top:
 
-    bgez $paddley, limit_right_paddle_bottom  # If paddley < 0
+    bgez $paddley, limit_right_paddle_bottom  # If paddley < 0.
     li $paddley, 0
 
 limit_right_paddle_bottom:
 
     addi $tmp, $paddley, (-kPaddleMaxY * 4)
-    blez $tmp, end_update_right_paddle  # If paddley > height
+    blez $tmp, end_update_right_paddle  # If paddley > height.
     li $paddley, (kPaddleMaxY * 4)
 
 

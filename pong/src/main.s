@@ -1,5 +1,5 @@
 #
-#  Pong.
+#  A pong like game.
 #
 #  Copyright (C) 2018, Guillaume Gonnet
 #  License MIT
@@ -8,12 +8,15 @@
 .set noreorder
 
 
-# Variables and definitions
+# Other data.
+.include "text/font-data.s"
+
+# Variables and definitions.
 .include "defs.s"
 .include "variables.s"
 
 
-# Application options
+# Application options.
 .set kFramePerSecond, 30
 
 .include "debug.s"
@@ -32,21 +35,20 @@ main:
     li $tmp, 200
     sw $tmp, kTimerThresoldAddress($zero)  # Set timer thresold
 
-    .include "update/init.s"
-    .file "main.s"
-
-    # Fall through 'cleanup'
+    # Fall through 'cleanup_whole'
 
 
 
 # First, clean the whole screen
+cleanup_whole:
+
+    li $vgaend, (4 * kScreenWidth * kScreenHeight)
+    add $vgaend, $vga
+
 cleanup:
 
     li $color, kBackgroundColor
-
     move $vgapos, $vga
-    li $vgaend, (4 * kScreenWidth * kScreenHeight)
-    add $vgaend, $vgaend, $vga
 
 cleanup_loop:  # Loop: clean the screen pixel by pixel
 
@@ -57,14 +59,17 @@ cleanup_loop:  # Loop: clean the screen pixel by pixel
 
 end_cleanup_loop:
 
+    .include "update/init.s"
+    .file "main.s"
+
     # Fall through 'main_loop'
 
 
 
-# Main application loop
+# Main application loop.
 main_loop:
 
-wait_for_timer:  # Loop: wait for the next frame
+wait_for_timer:  # Loop: wait for the next frame.
 
     lw $tmp, kTimerReadAddress($zero)
     bne $tmp, $zero, wait_for_timer
@@ -83,6 +88,9 @@ end_wait_for_timer:
 
 
 
-# Libraries
-.include "render/gfx.s"
+# Other logic code and libraries.
 .include "update/hit-paddle.s"
+.include "game/score.s"
+.include "render/gfx.s"
+.include "text/score.s"
+.include "text/letter.s"

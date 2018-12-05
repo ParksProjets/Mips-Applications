@@ -36,7 +36,7 @@ $(OBJDIR)/main.o: $(SRCDIR)/main.s $(OBJDIR)
 
 # Run Pong on MIPSimu
 run: copy
-	$(MIPSimu)/mipsimu $<
+	$(MIPSimu)/mipsimu -d $(MIPSimu)/$(OUT_NAME).bin
 
 # Create .bin file in MIPSimu build folder
 copy: $(MIPSimu)/$(OUT_NAME).bin

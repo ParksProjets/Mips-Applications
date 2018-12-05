@@ -8,30 +8,29 @@
 
 
 # Hit test between the ball and a paddle.
-# Arguments: $paddley, $bally
+# Arguments: $paddley, $bally, $scoreptr
 # Used: $tmp
 hittest_paddle:
 
     sub $tmp, $paddley, $bally
     addi $tmp, ((-kBallHeight + 1) * 4)
-    bgtz $tmp, ball_scored  # not(paddley <= bally) -> player scored
+    bgtz $tmp, ball_scored  # not(paddley <= bally) -> player/cpu scored.
 
     addi $tmp, ((kPaddleHeight + kBallHeight - 2) * 4)
-    bgez $tmp, hit_paddle  # (bally <= paddley + h) -> ball hits paddle
+    bgez $tmp, hit_paddle  # (bally <= paddley + h) -> ball hits paddle.
 
 
-ball_scored: # The ball hits the left wall: the right player score!
+ball_scored: # The ball hits a wall: player/CPU scores!
 
-    # TODO: add point
-    j main
+    j increment_score  # Increment score and restart.
 
 
-hit_paddle: # The ball hits the paddle
+hit_paddle: # The ball hits the paddle.
 
     sub $ballvelx, $zero, $ballvelx  # ballvelx = -ballvelx
-    add $ballx, $ballvelx
+    add $ballx, $ballvelx  # Apply new x velocity.
 
 
 end_hittest_paddle:
 
-    jr $ra  # Function return
+    jr $ra  # Function return.
