@@ -32,7 +32,7 @@
 # Bird velocities
 .set kBirdMaxVelocity, 12
 .set kBirdGravity, 1
-.set kBirdJumpHeight, 15
+.set kBirdJumpHeight, 17
 
 # Number of frames between jumps
 .set kBirdAllowJump, 2
